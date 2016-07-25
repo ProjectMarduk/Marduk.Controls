@@ -2,7 +2,7 @@
 Yet another controls library for Universal Windows Apps.
 
 # Nuget
-![Marduk.Controls](https://www.nuget.org/packages/Marduk.Controls/)
+[Marduk.Controls](https://www.nuget.org/packages/Marduk.Controls/)
 
 ```
 PM> Install-Package Marduk.Controls
