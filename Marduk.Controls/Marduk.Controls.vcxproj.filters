@@ -1,0 +1,42 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="14.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Resources">
+      <UniqueIdentifier>4f20b23b-50f7-4fc5-80c7-cbba61766919</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tga;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="pch.cpp" />
+    <ClCompile Include="OrientedVirtualizingPanel.cpp" />
+    <ClCompile Include="VirtualizingPanel.cpp" />
+    <ClCompile Include="VirtualizingViewItem.cpp" />
+    <ClCompile Include="VisualWindow.cpp" />
+    <ClCompile Include="WaterfallFlowLayout.cpp" />
+    <ClCompile Include="WaterfallFlowUnit.cpp" />
+    <ClCompile Include="WaterfallFlowView.cpp" />
+    <ClCompile Include="IItemResizer.cpp" />
+    <ClCompile Include="ILayout.cpp" />
+    <ClCompile Include="PhotowallLayout.cpp" />
+    <ClCompile Include="PhotowallUnit.cpp" />
+    <ClCompile Include="PhotowallView.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="pch.h" />
+    <ClInclude Include="OrientedVirtualizingPanel.h" />
+    <ClInclude Include="VirtualizingPanel.h" />
+    <ClInclude Include="VirtualizingViewItem.h" />
+    <ClInclude Include="VisualWindow.h" />
+    <ClInclude Include="WaterfallFlowLayout.h" />
+    <ClInclude Include="WaterfallFlowUnit.h" />
+    <ClInclude Include="WaterfallFlowView.h" />
+    <ClInclude Include="IItemResizer.h" />
+    <ClInclude Include="ILayout.h" />
+    <ClInclude Include="PhotowallLayout.h" />
+    <ClInclude Include="PhotowallUnit.h" />
+    <ClInclude Include="PhotowallView.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <Page Include="Themes\Generic.xaml" />
+  </ItemGroup>
+</Project>
