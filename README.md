@@ -18,7 +18,7 @@ Both of **PhotowallView** and **WaterfallFlowView** support UI virtualizing whic
 ## Incremental Loading
 Just make your ItemSource inherits form `Windows.UI.Xaml.Data.ISupportIncrementalLoading` then the control would do the rest.
 
-## Item Ttapped Event
+## Item Tapped Event
 Hooking up to the ItemTapped event with **PhotowallView** or **WaterfallFlowView** to get notified when an item was tapped.
 
 ## Easy Styling/ Comprehensive Visual States/ Multiselection
