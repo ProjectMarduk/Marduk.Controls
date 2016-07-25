@@ -1,6 +1,13 @@
 # Marduk.Controls
 Yet another controls library for Universal Windows Apps.
 
+# Nuget
+![Marduk.Controls](https://www.nuget.org/packages/Marduk.Controls/)
+
+```
+PM> Install-Package Marduk.Controls
+```
+
 # Controls
 ## PhotowallView
 A stand alone photo wall layout control with virtualizing capability.
