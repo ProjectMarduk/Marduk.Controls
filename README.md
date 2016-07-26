@@ -18,6 +18,7 @@ A stand alone waterfall flow layout controls with virtualizing capability.
 ![waterfall]
 (https://cloud.githubusercontent.com/assets/9367842/17103352/8064d730-52b0-11e6-865d-bdd07396ed0c.gif)
 
+
 # Features
 ## UI Virtualizing
 Both of **PhotowallView** and **WaterfallFlowView** support UI virtualizing which enables the system to render only the visible items inside the viewport.
@@ -94,7 +95,7 @@ public class MyItemResizer : IItemResizer
     }
 }
 ```
-#### (2) Assign the resize to the WaterfallFlowView.
+#### (2) Assign the resizer to the WaterfallFlowView.
 
 ```XAML
 <ScrollViewer>
