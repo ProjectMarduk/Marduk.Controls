@@ -18,6 +18,8 @@ namespace Marduk
             virtual RegisterReadOnlyProperty(int, _units->size(), UnitCount);
             RegisterReadOnlyProperty(double, _spacing, Spacing);
             RegisterReadOnlyProperty(int, _stacks->size(), StackCount);
+            virtual RegisterReadOnlyProperty(Size, _headerSize, HeaderSize);
+            virtual RegisterReadOnlyProperty(Size, _footerSize, FooterSize);
 
             WaterfallFlowLayout(double spacing, double width, int stackCount);
 
@@ -31,6 +33,13 @@ namespace Marduk
             virtual bool FillWindow(VisualWindow window);
             virtual void ChangePanelSize(double width);
             virtual Size GetItemSize(int index);
+
+            virtual Size GetHeaderAvailableSize();
+            virtual Size GetFooterAvailableSize();
+            virtual bool SetHeaderSize(Size size);
+            virtual bool SetFooterSize(Size size);
+            virtual Rect GetHeaderLayoutRect();
+            virtual Rect GetFooterLayoutRect();
 
             void ChangeSpacing(double width);
             void ChangeStackCount(int stackCount);
@@ -46,6 +55,9 @@ namespace Marduk
 
             int _requestRelayoutIndex = -1;
             void SetRelayoutIndex(int index);
+
+            Size _headerSize = Size(0, 0);
+            Size _footerSize = Size(0, 0);
         };
     }
 }

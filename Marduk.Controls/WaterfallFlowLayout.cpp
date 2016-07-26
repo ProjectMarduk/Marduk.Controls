@@ -64,6 +64,8 @@ Platform::IntPtr WaterfallFlowLayout::GetVisableItems(VisualWindow window, int* 
         Relayout();
     }
 
+    window.Offset -= _headerSize.Height;
+
     std::vector<Platform::Object^>* result = new std::vector<Platform::Object^>();
 
     if (_units->size() == 0)
@@ -194,13 +196,14 @@ Rect WaterfallFlowLayout::GetItemLayoutRect(int index)
     result.Height = unit->DesiredSize.Height;
     result.Width = unit->DesiredSize.Width;
     result.X = unit->StackIndex * (unitWidth + Spacing);
-    result.Y = unit->Offset;
+    result.Y = unit->Offset + _headerSize.Height;
 
     return result;
 }
 
 bool WaterfallFlowLayout::FillWindow(VisualWindow window)
 {
+    window.Offset -= _headerSize.Height;
     return *std::min_element(_stacks->begin(), _stacks->end()) >= VisualWindowExtension::GetEndOffset(window);
 }
 
@@ -267,7 +270,6 @@ void WaterfallFlowLayout::Relayout()
         (*_stacks)[i] = 0;
         flags->push_back(false);
     }
-
 
     for (int i = _requestRelayoutIndex - 1; i >= 0; i--)
     {
@@ -337,4 +339,47 @@ void WaterfallFlowLayout::RemoveAll()
 Size WaterfallFlowLayout::GetItemSize(int index)
 {
     return _units->at(index)->DesiredSize;
+}
+
+Size WaterfallFlowLayout::GetHeaderAvailableSize()
+{
+    return Size(Width, INFINITY);
+}
+
+Size WaterfallFlowLayout::GetFooterAvailableSize()
+{
+    auto width = (Width - ((StackCount - 1) * Spacing)) / StackCount;
+    return Size(width, (*std::max_element(_stacks->begin(), _stacks->end())) - (*std::min_element(_stacks->begin(), _stacks->end())));
+}
+
+bool WaterfallFlowLayout::SetHeaderSize(Size size)
+{
+    if (size.Width != _headerSize.Width || size.Height != _headerSize.Height)
+    {
+        _headerSize = size;
+        return true;
+    }
+    return false;
+}
+
+bool WaterfallFlowLayout::SetFooterSize(Size size)
+{
+    if (size.Width != _footerSize.Width || size.Height != _footerSize.Height)
+    {
+        _footerSize = size;
+        return true;
+    }
+    return false;
+}
+
+Rect WaterfallFlowLayout::GetHeaderLayoutRect()
+{
+    return Rect(0, 0, _headerSize.Width, _headerSize.Height);
+}
+
+Rect WaterfallFlowLayout::GetFooterLayoutRect()
+{
+    auto width = (Width - ((StackCount - 1) * Spacing)) / StackCount;
+    int minStackIndex = std::distance(_stacks->begin(), std::min_element(_stacks->begin(), _stacks->end()));
+    return Rect(minStackIndex * (width + Spacing), _stacks->at(minStackIndex) + Spacing + _headerSize.Height, _footerSize.Width, _footerSize.Height);
 }

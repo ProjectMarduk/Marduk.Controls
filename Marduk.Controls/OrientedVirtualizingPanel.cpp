@@ -72,12 +72,20 @@ Size OrientedVirtualizingPanel::MeasureOverride(Size availableSize)
     {
         _requestRelayout = false;
 
-        if (_requestShowItemIndex < 0)
+        if (_requestShowItemIndex < 0 && (_parentScrollView->VerticalOffset > Layout->HeaderSize.Height))
         {
             int requestFirstVisableItemIndex = _firstRealizationItemIndex;
             int requestLastVisableItemIndex = _lastRealizationItemIndex;
-            delete(std::vector<Object^>*)(void*)(_layout->GetVisableItems(VisualWindow{ _parentScrollView->VerticalOffset,_parentScrollView->ViewportHeight }, &requestFirstVisableItemIndex, &requestLastVisableItemIndex));
-            _requestShowItemIndex = requestFirstVisableItemIndex;
+            auto items = (std::vector<Object^>*)(void*)(_layout->GetVisableItems(VisualWindow{ _parentScrollView->VerticalOffset,_parentScrollView->ViewportHeight }, &requestFirstVisableItemIndex, &requestLastVisableItemIndex));
+            delete(items);
+            for (int i = requestFirstVisableItemIndex; i <= requestLastVisableItemIndex; i++)
+            {
+                if (Layout->GetItemLayoutRect(i).Top >= _parentScrollView->VerticalOffset)
+                {
+                    _requestShowItemIndex = i;
+                    break;
+                }
+            }
         }
 
         Relayout(availableSize);
@@ -137,10 +145,21 @@ Size OrientedVirtualizingPanel::MeasureOverride(Size availableSize)
 
     auto children = Children;
 
-    for (auto item : *needRealizeItems)
+    if (_itemAvailableSizeCache.Width == _itemAvailableSize.Width && _itemAvailableSizeCache.Height == _itemAvailableSize.Height)
     {
-        auto container = RealizeItem(item);
-        container->Measure(_itemAvailableSize);
+        for (auto item : *needRealizeItems)
+        {
+            auto container = RealizeItem(item);
+            container->Measure(_itemAvailableSize);
+        }
+    }
+    else
+    {
+        for (auto item : *visableItems)
+        {
+            auto container = RealizeItem(item);
+            container->Measure(_itemAvailableSize);
+        }
     }
 
     for (auto item : *needRecycleItems)
@@ -153,9 +172,27 @@ Size OrientedVirtualizingPanel::MeasureOverride(Size availableSize)
     delete(_visableItems);
     _visableItems = visableItems;
 
-
     _firstRealizationItemIndex = requestFirstRealizationItemIndex;
     _lastRealizationItemIndex = requestLastRealizationItemIndex;
+    _itemAvailableSizeCache = _itemAvailableSize;
+
+    if (HeaderContainer != nullptr)
+    {
+        OnHeaderMeasureOverride(availableSize);
+    }
+
+    if (FooterContainer != nullptr)
+    {
+        if(_lastRealizationItemIndex +1 == Items->Size)
+        {
+            FooterContainer->Visibility = Windows::UI::Xaml::Visibility::Visible;
+        }
+        else
+        {
+            FooterContainer->Visibility = Windows::UI::Xaml::Visibility::Collapsed;
+        }
+        OnFooterMeasureOverride(availableSize);
+    }
 
     return _layout->LayoutSize;
 }
@@ -189,6 +226,16 @@ Size OrientedVirtualizingPanel::ArrangeOverride(Size finalSize)
         auto rect = _layout->GetItemLayoutRect(i);
         auto container = GetContainerFormIndex(i);
         container->Arrange(rect);
+    }
+
+    if (HeaderContainer != nullptr)
+    {
+        OnHeaderArrangeOverride(finalSize);
+    }
+
+    if (FooterContainer != nullptr)
+    {
+        OnFooterArrangeOverride(finalSize);
     }
 
     return finalSize;
@@ -327,4 +374,38 @@ void OrientedVirtualizingPanel::Relayout(Size availableSize)
 ILayout^ OrientedVirtualizingPanel::GetLayout(Size availableSize)
 {
     return nullptr;
+}
+
+void OrientedVirtualizingPanel::OnHeaderMeasureOverride(Size availableSize)
+{
+    if (HeaderContainer == nullptr)
+        return;
+    
+    availableSize = Layout->GetHeaderAvailableSize();
+    HeaderContainer->Measure(availableSize);
+    Layout->SetHeaderSize(Size(availableSize.Width, HeaderContainer->DesiredSize.Height));
+}
+void OrientedVirtualizingPanel::OnHeaderArrangeOverride(Size finalSize)
+{
+    if (HeaderContainer == nullptr)
+        return;
+
+    HeaderContainer->Arrange(Layout->GetHeaderLayoutRect());
+}
+
+void OrientedVirtualizingPanel::OnFooterMeasureOverride(Size availableSize)
+{
+    if (FooterContainer == nullptr)
+        return;
+
+    availableSize = Layout->GetFooterAvailableSize();
+    FooterContainer->Measure(availableSize);
+    Layout->SetFooterSize(availableSize);
+}
+void OrientedVirtualizingPanel::OnFooterArrangeOverride(Size finalSize)
+{
+    if (FooterContainer == nullptr)
+        return;
+
+    FooterContainer->Arrange(Layout->GetFooterLayoutRect());
 }

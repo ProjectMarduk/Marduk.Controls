@@ -13,6 +13,8 @@ namespace Marduk
             property double Width {double get(); };
             property Size LayoutSize {Size get(); };
             property int UnitCount {int get(); };
+            property Size HeaderSize {Size get(); };
+            property Size FooterSize {Size get(); };
 
             void AddItem(int index, Platform::Object^ item, Size size);
             void ChangeItem(int index, Platform::Object^ item, Size size);
@@ -24,6 +26,13 @@ namespace Marduk
             bool FillWindow(VisualWindow window);
             void ChangePanelSize(double width);
             Size GetItemSize(int index);
+            
+            Size GetHeaderAvailableSize();
+            Size GetFooterAvailableSize();
+            bool SetHeaderSize(Size size);
+            bool SetFooterSize(Size size);
+            Rect GetHeaderLayoutRect();
+            Rect GetFooterLayoutRect();
         };
     }
 }

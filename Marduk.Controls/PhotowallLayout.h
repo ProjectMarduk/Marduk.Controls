@@ -16,6 +16,8 @@ namespace Marduk
             virtual RegisterReadOnlyProperty(double, _width, Width);
             virtual RegisterReadOnlyProperty(Size, Size(Width, UnitCount == 0 ? 0 : RowCount * (_unitSize + _spacing) - _spacing), LayoutSize);
             virtual RegisterReadOnlyProperty(int, _units->size(), UnitCount);
+            virtual RegisterReadOnlyProperty(Size, _headerSize, HeaderSize);
+            virtual RegisterReadOnlyProperty(Size, _footerSize, FooterSize);
 
             RegisterReadOnlyProperty(double, _spacing, Spacing);
             RegisterReadOnlyProperty(double, _unitSize, UnitSize);
@@ -36,6 +38,13 @@ namespace Marduk
             virtual Size GetItemSize(int index);
 
             Size GetItemSize(Platform::Object^ item);
+            
+            virtual Size GetHeaderAvailableSize();
+            virtual Size GetFooterAvailableSize();
+            virtual bool SetHeaderSize(Size size);
+            virtual bool SetFooterSize(Size size);
+            virtual Rect GetHeaderLayoutRect();
+            virtual Rect GetFooterLayoutRect();
 
             void ChangeSpacing(double spacing);
             void ChangeUnitSize(double unitSize);
@@ -50,6 +59,10 @@ namespace Marduk
             std::vector<PhotowallUnit^>* _units;
             std::unordered_map<Platform::Object^, PhotowallUnit^, HashObject>* _itemUnitMap;
             int _requestRelayoutIndex = -1;
+
+            Size _headerSize = Size(0, 0);
+            Size _footerSize = Size(0, 0);
+
             void SetRelayoutIndex(int index);
             void Relayout();
             void RelayoutRow(int itemIndex);

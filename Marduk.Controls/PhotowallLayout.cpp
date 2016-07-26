@@ -134,6 +134,7 @@ Platform::IntPtr PhotowallLayout::GetVisableItems(VisualWindow window, int* firs
         Relayout();
     }
 
+    window.Offset -= _headerSize.Height;
     std::vector<Platform::Object^>* result = new std::vector<Platform::Object^>();
 
     if (_units->size() == 0)
@@ -164,7 +165,7 @@ Platform::IntPtr PhotowallLayout::GetVisableItems(VisualWindow window, int* firs
             firstRowIndex = lastRow - visableRowCount + 1;
         }
 
-        if(firstRowIndex < 0)
+        if (firstRowIndex < 0)
         {
             firstRowIndex = 0;
         }
@@ -296,14 +297,14 @@ Rect PhotowallLayout::GetItemLayoutRect(int index)
         result.Height = unit->DesiredSize.Height;
         result.Width = unit->DesiredSize.Width;
         result.X = unit->Offset;
-        result.Y = unit->RowIndex * (_unitSize + _spacing);
+        result.Y = unit->RowIndex * (_unitSize + _spacing) + _headerSize.Height;
     }
     else
     {
         result.Height = isinf(unit->ActualSize.Height) ? unit->DesiredSize.Height : unit->ActualSize.Height;
         result.Width = isinf(unit->ActualSize.Width) ? unit->DesiredSize.Width : unit->ActualSize.Width;
         result.X = (unit->ActualOffset < 0) ? unit->Offset : unit->ActualOffset;
-        result.Y = unit->RowIndex * (_unitSize + _spacing);
+        result.Y = unit->RowIndex * (_unitSize + _spacing) + _headerSize.Height;
     }
 
     return result;
@@ -553,4 +554,44 @@ void PhotowallLayout::Relayout()
 
     delete(relayoutRows);
     _requestRelayoutIndex = -1;
+}
+
+Size PhotowallLayout::GetHeaderAvailableSize()
+{
+    return Size(Width, INFINITY);
+}
+
+Size PhotowallLayout::GetFooterAvailableSize()
+{
+    return Size(Width - _offset + Spacing, UnitSize);
+}
+
+bool PhotowallLayout::SetHeaderSize(Size size)
+{
+    if (size.Width != _headerSize.Width || size.Height != _headerSize.Height)
+    {
+        _headerSize = size;
+        return true;
+    }
+    return false;
+}
+
+bool PhotowallLayout::SetFooterSize(Size size)
+{
+    if (size.Width != _footerSize.Width || size.Height != _footerSize.Height)
+    {
+        _footerSize = size;
+        return true;
+    }
+    return false;
+}
+
+Rect PhotowallLayout::GetHeaderLayoutRect()
+{
+    return Rect(0, 0, _headerSize.Width, _headerSize.Height);
+}
+
+Rect PhotowallLayout::GetFooterLayoutRect()
+{
+    return Rect(0, 0, 0, 0);
 }

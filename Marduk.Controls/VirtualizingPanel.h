@@ -63,6 +63,13 @@ namespace Marduk
             RegisterDependencyProperty(WinCon::DataTemplateSelector^, _itemTemplateSelectorProperty, ItemTemplateSelectorProperty, ItemTemplateSelector);
             RegisterDependencyProperty(Platform::Object^, _itemSourceProperty, ItemSourceProperty, ItemSource);
 
+            RegisterDependencyProperty(Windows::UI::Xaml::Style^, _headerContainerStyleProperty, HeaderContainerStyleProperty, HeaderContainerStyle);
+            RegisterDependencyProperty(DataTemplate^, _headerTemplateProperty, HeaderTemplateProperty, HeaderTemplate);
+            RegisterDependencyProperty(Platform::Object^, _headerProperty, HeaderProperty, Header);
+
+            RegisterDependencyProperty(Windows::UI::Xaml::Style^, _footerContainerStyleProperty, FooterContainerStyleProperty, FooterContainerStyle);
+            RegisterDependencyProperty(DataTemplate^, _footerTemplateProperty, FooterTemplateProperty, FooterTemplate);
+            RegisterDependencyProperty(Platform::Object^, _footerProperty, FooterProperty, Footer);
         public:
             RegisterReadOnlyProperty(IVectorView<Platform::Object^>^, _selectedItems->GetView(), SelectedItems);
             RegisterProperty(ItemSelectMode, _selectMode, SelectMode);
@@ -80,12 +87,15 @@ namespace Marduk
         protected:
             RegisterReadOnlyProperty(IVector<VirtualizingViewItem^>^, _recycledContainers, RecycledContainers);
             RegisterReadOnlyProperty(IVector<Platform::Object^>^, _items, Items);
+            RegisterReadOnlyProperty(WinCon::ContentControl^, _headerContainer, HeaderContainer);
+            RegisterReadOnlyProperty(WinCon::ContentControl^, _footerContainer, FooterContainer);
 
             virtual void RegisterDependencyProperties();
             virtual bool IsItemItsOwnContainerOverride(Platform::Object^ obj);
             virtual VirtualizingViewItem^ GetContainerForItemOverride();
             virtual void ClearContainerForItemOverride(VirtualizingViewItem^ container, Object^ item);
             virtual void PrepareContainerForItemOverride(VirtualizingViewItem^ container, Object^ item);
+
             virtual void OnItemContainerStyleChanged(Windows::UI::Xaml::Style^ newStyle, Windows::UI::Xaml::Style^ oldStyle);
             virtual void OnItemContainerStyleSelectorChanged(WinCon::StyleSelector^ newStyleSelector, WinCon::StyleSelector^ oldStyleSelector);
             virtual void OnItemTemplateChanged(DataTemplate^ newTemplate, DataTemplate^ oldTemplate);
@@ -93,6 +103,20 @@ namespace Marduk
             virtual void OnItemsChanged(IObservableVector<Platform::Object^>^ source, IVectorChangedEventArgs^ e);
             virtual void OnItemSourceChanged(Platform::Object^ newItems, Platform::Object^ oldItems);
             virtual void OnSeletionChanged(IObservableVector<Platform::Object^>^ source, IVectorChangedEventArgs^ e);
+
+            virtual void OnHeaderContainerStyleChanged(Windows::UI::Xaml::Style^ newStyle, Windows::UI::Xaml::Style^ oldStyle);
+            virtual void OnHeaderTemplateChanged(DataTemplate^ newTemplate, DataTemplate^ oldTemplate);
+            virtual void OnHeaderChanged(Platform::Object^ newHeader, Platform::Object^ oldHeader);
+
+            virtual void OnFooterContainerStyleChanged(Windows::UI::Xaml::Style^ newStyle, Windows::UI::Xaml::Style^ oldStyle);
+            virtual void OnFooterTemplateChanged(DataTemplate^ newTemplate, DataTemplate^ oldTemplate);
+            virtual void OnFooterChanged(Platform::Object^ newFooter, Platform::Object^ oldFooter);
+
+            virtual void OnHeaderMeasureOverride(Size availableSize);
+            virtual void OnHeaderArrangeOverride(Size finalSize);
+
+            virtual void OnFooterMeasureOverride(Size availableSize);
+            virtual void OnFooterArrangeOverride(Size finalSize);
 
             void OnItemTapped(Object^ sender, Input::TappedRoutedEventArgs^ e);
             void OnItemDoubleTapped(Object^ sender, Input::DoubleTappedRoutedEventArgs^ e);
@@ -118,9 +142,20 @@ namespace Marduk
             static void OnItemContainerStyleChangedStatic(DependencyObject^ sender, Windows::UI::Xaml::DependencyPropertyChangedEventArgs^ e);
             static void OnItemContainerStyleSelectorChangedStatic(DependencyObject^ sender, Windows::UI::Xaml::DependencyPropertyChangedEventArgs^ e);
 
+            static void OnHeaderContainerStyleChangedStatic(DependencyObject^ sender, Windows::UI::Xaml::DependencyPropertyChangedEventArgs^ e);
+            static void OnHeaderTemplateChangedStatic(DependencyObject^ sender, Windows::UI::Xaml::DependencyPropertyChangedEventArgs^ e);
+            static void OnHeaderChangedStatic(DependencyObject^ sender, Windows::UI::Xaml::DependencyPropertyChangedEventArgs^ e);
+
+            static void OnFooterContainerStyleChangedStatic(DependencyObject^ sender, Windows::UI::Xaml::DependencyPropertyChangedEventArgs^ e);
+            static void OnFooterTemplateChangedStatic(DependencyObject^ sender, Windows::UI::Xaml::DependencyPropertyChangedEventArgs^ e);
+            static void OnFooterChangedStatic(DependencyObject^ sender, Windows::UI::Xaml::DependencyPropertyChangedEventArgs^ e);
+
             void ApplyItemContainerStyle(VirtualizingViewItem^ container, Platform::Object^ item);
             void ApplyItemTemplate(VirtualizingViewItem^ container, Platform::Object^ item);
             void HandleTapped(Platform::Object^ item, ItemTapMode tapMode);
+
+            void CreateHeaderContainer();
+            void CreateFooterContainer();
 
             EventRegistrationToken _collectionEventToken;
             void OnCollectionChanged(Platform::Object^ sender, Windows::UI::Xaml::Interop::NotifyCollectionChangedEventArgs^ e);
@@ -140,6 +175,9 @@ namespace Marduk
             bool _userSelecting = false;
             bool _isShiftSelectEnable = true;
             bool _isRightTapSelectEnable = true;
+
+            WinCon::ContentControl^ _headerContainer;
+            WinCon::ContentControl^ _footerContainer;
         };
     }
 }
