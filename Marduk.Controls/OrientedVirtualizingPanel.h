@@ -1,7 +1,6 @@
 #pragma once
 #include "VisualWindow.h"
 #include "VirtualizingPanel.h"
-#include "IOrientedVirtualizingPanel.h"
 #include "IItemResizer.h"
 #include "ILayout.h"
 

@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2010/07/nuspec.xsd">
+    <metadata minClientVersion="2.8.6">
+        <id>Marduk.Controls</id>
+        <version>1.0.0</version>
+        <title>Marduk.Controls</title>
+        <authors>higan</authors>
+        <owners>higan</owners>
+        <description>Yet another controls library for Universal Windows Apps.</description>
+        <projectUrl>https://github.com/higankanshi/Marduk.Controls</projectUrl>
+        <licenseUrl>https://github.com/higankanshi/Marduk.Controls/blob/master/LICENSE</licenseUrl>
+        <copyright>Copyright (c) HIGAN. All rights reserved.</copyright>
+        <tags>Controls ListView Photowall Photowall WinRT XAML Windows UWP UAP Universal Windows Platform</tags>
+    </metadata>
+
+    <files>
+      <file target="lib\uap10.0\Marduk.Controls.winmd"                       src="Release\Marduk.Controls\Marduk.Controls.winmd" />
+      <file target="lib\uap10.0\Marduk.Controls.pri"                         src="Release\Marduk.Controls\Marduk.Controls.pri" />
+      <file target="lib\uap10.0\Marduk.Controls\Themes\Generic.xbf"          src="Release\Marduk.Controls\Themes\Generic.xbf" />
+      <file target="runtimes\win10-arm\native\Marduk.Controls.dll"           src="ARM\Release\Marduk.Controls\Marduk.Controls.dll" />
+      <file target="runtimes\win10-x64\native\Marduk.Controls.dll"           src="x64\Release\Marduk.Controls\Marduk.Controls.dll" />
+      <file target="runtimes\win10-x86\native\Marduk.Controls.dll"           src="Release\Marduk.Controls\Marduk.Controls.dll" />
+    </files>
+</package>
