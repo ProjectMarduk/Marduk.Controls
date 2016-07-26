@@ -790,6 +790,7 @@ void VirtualizingPanel::CreateHeaderContainer()
         _headerContainer->Style = HeaderContainerStyle;
         _headerContainer->ContentTemplate = HeaderTemplate;
         _headerContainer->Content = Header;
+		_headerContainer->HorizontalContentAlignment = Windows::UI::Xaml::HorizontalAlignment::Stretch;
         Children->InsertAt(0, _headerContainer);
     }
 }
@@ -802,6 +803,7 @@ void VirtualizingPanel::CreateFooterContainer()
         _footerContainer->Style = FooterContainerStyle;
         _footerContainer->ContentTemplate = FooterTemplate;
         _footerContainer->Content = Footer;
+		_footerContainer->HorizontalContentAlignment = Windows::UI::Xaml::HorizontalAlignment::Stretch;
         Children->InsertAt(0, _footerContainer);
     }
 }
