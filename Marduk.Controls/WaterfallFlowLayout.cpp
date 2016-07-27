@@ -39,7 +39,7 @@ void WaterfallFlowLayout::AddItem(int index, Platform::Object^ item, Size size)
             Relayout();
         }
 
-        int minStackIndex = std::distance(_stacks->begin(), std::min_element(_stacks->begin(), _stacks->end()));
+        int minStackIndex = (int)std::distance(_stacks->begin(), std::min_element(_stacks->begin(), _stacks->end()));
         unit->StackIndex = minStackIndex;
 
         if ((*_stacks)[minStackIndex] == 0)
@@ -139,7 +139,7 @@ LONGLONG WaterfallFlowLayout::GetVisableItems(VisualWindow window, int* firstInd
     {
         if (_units->at(_units->size() - 1)->Offset < VisualWindowExtension::GetEndOffset(window))
         {
-            *lastIndex = _units->size() - 1;
+            *lastIndex = (int)_units->size() - 1;
         }
         else
         {
@@ -170,7 +170,7 @@ LONGLONG WaterfallFlowLayout::GetVisableItems(VisualWindow window, int* firstInd
 
     if (*lastIndex < 0)
     {
-        *lastIndex = _units->size() - 1;
+        *lastIndex = (int)_units->size() - 1;
     }
 
     for (int i = *firstIndex; i <= *lastIndex; i++)
@@ -295,7 +295,7 @@ void WaterfallFlowLayout::Relayout()
         Size size = Size((float)((Width - Spacing) / _stacks->size()), unit->DesiredSize.Height);
         unit->DesiredSize = size;
 
-        int minStackIndex = std::distance(_stacks->begin(), std::min_element(_stacks->begin(), _stacks->end()));
+        int minStackIndex = (int)std::distance(_stacks->begin(), std::min_element(_stacks->begin(), _stacks->end()));
         unit->StackIndex = minStackIndex;
 
         if ((*_stacks)[minStackIndex] == 0)
@@ -380,6 +380,6 @@ Rect WaterfallFlowLayout::GetHeaderLayoutRect()
 Rect WaterfallFlowLayout::GetFooterLayoutRect()
 {
     auto width = (Width - ((StackCount - 1) * Spacing)) / StackCount;
-    int minStackIndex = std::distance(_stacks->begin(), std::min_element(_stacks->begin(), _stacks->end()));
+    int minStackIndex = (int)std::distance(_stacks->begin(), std::min_element(_stacks->begin(), _stacks->end()));
     return Rect((float)(minStackIndex * (width + Spacing)), (float)(_stacks->at(minStackIndex) + Spacing + _headerSize.Height), _footerSize.Width, _footerSize.Height);
 }

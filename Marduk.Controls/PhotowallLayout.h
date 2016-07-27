@@ -15,7 +15,7 @@ namespace Marduk
         public:
             virtual RegisterReadOnlyProperty(double, _width, Width);
             virtual RegisterReadOnlyProperty(Size, Size((float)Width, (float)(UnitCount == 0 ? 0 : RowCount * (_unitSize + _spacing) - _spacing)), LayoutSize);
-            virtual RegisterReadOnlyProperty(int, _units->size(), UnitCount);
+            virtual RegisterReadOnlyProperty(int, (int)_units->size(), UnitCount);
             virtual RegisterReadOnlyProperty(Size, _headerSize, HeaderSize);
             virtual RegisterReadOnlyProperty(Size, _footerSize, FooterSize);
 

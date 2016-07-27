@@ -57,13 +57,13 @@ void PhotowallLayout::AddItem(int index, Platform::Object^ item, Size size)
             unit->RowIndex = _rowIndex;
             _offset += size.Width;
 
-            RelayoutRow(_units->size() - 2);
+            RelayoutRow((int)_units->size() - 2);
         }
 
 
         if (_offset >= _width)
         {
-            RelayoutRow(_units->size() - 1);
+            RelayoutRow((int)_units->size() - 1);
             _rowIndex++;
             _offset = 0;
             _lastRowLocked = true;
@@ -100,7 +100,7 @@ void PhotowallLayout::RelayoutRow(int itemIndex)
 
     if (rowLastItemIndex < 0)
     {
-        rowLastItemIndex = _units->size() - 1;
+        rowLastItemIndex = (int)_units->size() - 1;
     }
 
     double newOffset = 0;
@@ -233,7 +233,7 @@ LONGLONG PhotowallLayout::GetVisableItems(VisualWindow window, int* firstIndex, 
     {
         if (*lastIndex >= (LONGLONG)_units->size())
         {
-            *lastIndex = _units->size() - 1;
+            *lastIndex = (int)_units->size() - 1;
         }
 
         if (_units->at(*lastIndex)->RowIndex < lastRowIndex)
@@ -262,7 +262,7 @@ LONGLONG PhotowallLayout::GetVisableItems(VisualWindow window, int* firstIndex, 
 
     if (newLastIndex < 0)
     {
-        newLastIndex = _units->size() - 1;
+        newLastIndex = (int)_units->size() - 1;
     }
 
     if (newLastIndex - newFirstIndex > 200)

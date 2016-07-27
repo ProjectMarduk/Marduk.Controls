@@ -15,9 +15,9 @@ namespace Marduk
         public:
             virtual RegisterReadOnlyProperty(double, _width, Width);
             virtual RegisterReadOnlyProperty(Size, Size((float)Width, (float)*std::max_element(_stacks->begin(), _stacks->end())), LayoutSize);
-            virtual RegisterReadOnlyProperty(int, _units->size(), UnitCount);
+            virtual RegisterReadOnlyProperty(int, (int)_units->size(), UnitCount);
             RegisterReadOnlyProperty(double, _spacing, Spacing);
-            RegisterReadOnlyProperty(int, _stacks->size(), StackCount);
+            RegisterReadOnlyProperty(int, (int)_stacks->size(), StackCount);
             virtual RegisterReadOnlyProperty(Size, _headerSize, HeaderSize);
             virtual RegisterReadOnlyProperty(Size, _footerSize, FooterSize);
 
