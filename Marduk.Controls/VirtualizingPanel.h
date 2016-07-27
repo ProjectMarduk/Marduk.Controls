@@ -118,6 +118,8 @@ namespace Marduk
             virtual void OnFooterMeasureOverride(Size availableSize);
             virtual void OnFooterArrangeOverride(Size finalSize);
 
+            virtual void OnItemContainerSizeChanged(Platform::Object^ item, VirtualizingViewItem^ itemContainer, Size newSize);
+
             void OnItemTapped(Object^ sender, Input::TappedRoutedEventArgs^ e);
             void OnItemDoubleTapped(Object^ sender, Input::DoubleTappedRoutedEventArgs^ e);
             void OnItemRightTapped(Object^ sender, Input::RightTappedRoutedEventArgs^ e);
@@ -175,9 +177,10 @@ namespace Marduk
             bool _userSelecting = false;
             bool _isShiftSelectEnable = true;
             bool _isRightTapSelectEnable = true;
-
+            
             WinCon::ContentControl^ _headerContainer;
             WinCon::ContentControl^ _footerContainer;
-        };
+            void OnItemSizeChanged(Platform::Object ^sender, Windows::UI::Xaml::SizeChangedEventArgs ^e);
+};
     }
 }

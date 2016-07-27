@@ -33,6 +33,10 @@ namespace Marduk
 
         private:
             static void OnIsSelectedChangedStatic(DependencyObject^ sender, DependencyPropertyChangedEventArgs^ e);
+            Windows::Foundation::EventRegistrationToken _sizeChangedToken;
+
+        internal:
+            RegisterProperty(Windows::Foundation::EventRegistrationToken, _sizeChangedToken, SizeChangedToken)
         };
     }
 }

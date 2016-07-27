@@ -40,6 +40,8 @@ namespace Marduk
 
             virtual void OnFooterMeasureOverride(Size availableSize) override;
             virtual void OnFooterArrangeOverride(Size finalSize) override;
+            
+            virtual void OnItemContainerSizeChanged(Platform::Object^ item, VirtualizingViewItem^ itemContainer, Size newSize) override;
         private:
             WinCon::ScrollViewer^ _parentScrollView;
             int _viewIndex = -1;

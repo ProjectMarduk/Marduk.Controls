@@ -16,6 +16,9 @@ namespace Marduk
         {
             RegisterDependencyProperty(double, _spacingProperty, SpacingProperty, Spacing);
             RegisterDependencyProperty(int, _stackCountProperty, StackCountProperty, StackCount);
+            RegisterDependencyProperty(bool, _isAdaptiveEnableProperty, IsAdaptiveEnableProperty, IsAdaptiveEnable);
+            RegisterDependencyProperty(int , _maxItemWidthProperty, MaxItemWidthProperty, MaxItemWidth);
+            RegisterDependencyProperty(int , _minItemWidthProperty, MinItemWidthProperty, MinItemWidth);
 
         public:
             WaterfallFlowView();
@@ -32,6 +35,11 @@ namespace Marduk
                 WaterfallFlowLayout^ _waterfallFlowLayout;
             static void OnSpacingChangedStatic(DependencyObject^ sender, Windows::UI::Xaml::DependencyPropertyChangedEventArgs^ e);
             static void OnStackCountChangedStatic(DependencyObject^ sender, Windows::UI::Xaml::DependencyPropertyChangedEventArgs^ e);
+            static void OnIsAdaptiveEnableChangedStatic(DependencyObject^ sender, Windows::UI::Xaml::DependencyPropertyChangedEventArgs^ e);
+            static void OnMaxItemWidthChangedStatic(DependencyObject^ sender, Windows::UI::Xaml::DependencyPropertyChangedEventArgs^ e);
+            static void OnMinItemWidthChangedStatic(DependencyObject^ sender, Windows::UI::Xaml::DependencyPropertyChangedEventArgs^ e);
+
+            void ResetStackCount();
         };
     }
 }

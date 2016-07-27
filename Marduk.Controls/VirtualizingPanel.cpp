@@ -697,6 +697,8 @@ void VirtualizingPanel::RecycleItem(Object^ item)
         _itemContainerMap->Remove(item);
         ClearContainerForItemOverride(container, item);
 
+        container->SizeChanged -= container->SizeChangedToken;
+
         if (!IsItemItsOwnContainerOverride(item))
         {
             RecycledContainers->Append(container);
@@ -736,8 +738,9 @@ VirtualizingViewItem^  VirtualizingPanel::RealizeItem(Object^ item)
 
     PrepareContainerForItemOverride(container, item);
     _itemContainerMap->Insert(item, container);
+    container->SizeChangedToken = container->SizeChanged += ref new Windows::UI::Xaml::SizeChangedEventHandler(this, &Marduk::Controls::VirtualizingPanel::OnItemSizeChanged);
     Children->Append(container);
-
+    
     return container;
 }
 
@@ -948,6 +951,11 @@ void VirtualizingPanel::OnFooterArrangeOverride(Size finalSize)
 
 }
 
+void VirtualizingPanel::OnItemContainerSizeChanged(Platform::Object^ item, VirtualizingViewItem^ itemContainer, Size newSize)
+{
+
+}
+
 ItemTappedEventArgs::ItemTappedEventArgs(VirtualizingViewItem^ container, Platform::Object^ item, ItemTapMode mode)
 {
     _container = container;
@@ -958,4 +966,10 @@ ItemTappedEventArgs::ItemTappedEventArgs(VirtualizingViewItem^ container, Platfo
 SeletionChangedEventArgs::SeletionChangedEventArgs()
 {
 
+}
+
+void VirtualizingPanel::OnItemSizeChanged(Platform::Object ^sender, Windows::UI::Xaml::SizeChangedEventArgs ^e)
+{
+    auto container = dynamic_cast<VirtualizingViewItem^> (sender);
+    OnItemContainerSizeChanged(GetItemFormContainer(container), container, e->NewSize);
 }
