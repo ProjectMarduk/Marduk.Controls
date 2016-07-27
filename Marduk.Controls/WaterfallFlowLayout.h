@@ -28,7 +28,7 @@ namespace Marduk
             virtual void RemoveItem(int index);
             virtual void RemoveAll();
 
-            virtual Platform::IntPtr GetVisableItems(VisualWindow window, int* firstIndex, int * lastIndex);
+            virtual LONGLONG GetVisableItems(VisualWindow window, int* firstIndex, int * lastIndex);
             virtual Rect GetItemLayoutRect(int index);
             virtual bool FillWindow(VisualWindow window);
             virtual void ChangePanelSize(double width);

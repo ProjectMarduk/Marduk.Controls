@@ -127,7 +127,7 @@ void PhotowallLayout::RelayoutRow(int itemIndex)
     }
 }
 
-Platform::IntPtr PhotowallLayout::GetVisableItems(VisualWindow window, int* firstIndex, int * lastIndex)
+LONGLONG PhotowallLayout::GetVisableItems(VisualWindow window, int* firstIndex, int * lastIndex)
 {
     if (!(_requestRelayoutIndex < 0 || _requestRelayoutIndex >= _units->size()))
     {
@@ -141,7 +141,7 @@ Platform::IntPtr PhotowallLayout::GetVisableItems(VisualWindow window, int* firs
     {
         *firstIndex = -1;
         *lastIndex = -1;
-        return result;
+        return (LONGLONG)result;
     }
 
     int firstRowIndex, lastRowIndex, visableRowCount, newFirstIndex = -1, newLastIndex = -1;
@@ -278,7 +278,7 @@ Platform::IntPtr PhotowallLayout::GetVisableItems(VisualWindow window, int* firs
         result->push_back(_units->at(i)->Item);
     }
 
-    return result;
+    return (LONGLONG)result;
 }
 
 Rect PhotowallLayout::GetItemLayoutRect(int index)

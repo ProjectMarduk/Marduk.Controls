@@ -57,7 +57,7 @@ void WaterfallFlowLayout::AddItem(int index, Platform::Object^ item, Size size)
     }
 }
 
-Platform::IntPtr WaterfallFlowLayout::GetVisableItems(VisualWindow window, int* firstIndex, int * lastIndex)
+LONGLONG WaterfallFlowLayout::GetVisableItems(VisualWindow window, int* firstIndex, int * lastIndex)
 {
     if (!(_requestRelayoutIndex < 0 || _requestRelayoutIndex >= _units->size()))
     {
@@ -72,7 +72,7 @@ Platform::IntPtr WaterfallFlowLayout::GetVisableItems(VisualWindow window, int* 
     {
         *firstIndex = -1;
         *lastIndex = -1;
-        return result;
+        return (LONGLONG)result;
     }
 
     if (*firstIndex < 0)
@@ -178,7 +178,7 @@ Platform::IntPtr WaterfallFlowLayout::GetVisableItems(VisualWindow window, int* 
         result->push_back(_units->at(i)->Item);
     }
 
-    return result;
+    return (LONGLONG)result;
 }
 
 Rect WaterfallFlowLayout::GetItemLayoutRect(int index)

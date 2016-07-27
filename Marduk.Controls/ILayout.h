@@ -7,7 +7,7 @@ namespace Marduk
 {
     namespace Controls
     {
-        interface class ILayout
+        public interface class ILayout
         {
         public:
             property double Width {double get(); };
@@ -21,7 +21,7 @@ namespace Marduk
             void RemoveItem(int index);
             void RemoveAll();
 
-            Platform::IntPtr GetVisableItems(VisualWindow window, int* firstIndex, int* lastIndex);
+            LONGLONG GetVisableItems(VisualWindow window, int* firstIndex, int* lastIndex);
             Rect GetItemLayoutRect(int index);
             bool FillWindow(VisualWindow window);
             void ChangePanelSize(double width);
