@@ -22,7 +22,7 @@ namespace Marduk
             RegisterReadOnlyProperty(WinCon::ScrollViewer^, _parentScrollView, ParentScrollView);
             RegisterReadOnlyPropertyWithExpression(VirtualizingViewItem^, if (_measureControl == nullptr) { _measureControl = GetContainerForItemOverride(); Children->Append(_measureControl); } return _measureControl;, MeasureControl);
             RegisterReadOnlyProperty(ILayout^, _layout, Layout);
-            RegisterReadOnlyProperty(Platform::IntPtr, _visableItems, VisableItems);
+            RegisterReadOnlyProperty(LONGLONG, (LONGLONG)_visableItems, VisableItems);
 
             virtual Size MeasureOverride(Size availableSize) override;
             virtual Size ArrangeOverride(Size finalSize) override;

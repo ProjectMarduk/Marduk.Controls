@@ -7,7 +7,7 @@ namespace Marduk
 {
     namespace Controls
     {
-        public interface class ILayout
+        interface class ILayout
         {
         public:
             property double Width {double get(); };
