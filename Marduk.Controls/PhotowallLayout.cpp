@@ -20,19 +20,19 @@ PhotowallLayout::~PhotowallLayout()
 
 void PhotowallLayout::AddItem(int index, Platform::Object^ item, Size size)
 {
-    size.Height = _unitSize;
+    size.Height = (float)_unitSize;
     auto unit = ref new PhotowallUnit(item, size);
 
     (*_itemUnitMap)[item] = unit;
 
-    if (index >= 0 && index < _units->size())
+    if (index >= 0 && index < (LONGLONG)_units->size())
     {
         _units->insert(_units->begin() + index, unit);
         SetRelayoutIndex(index);
     }
     else
     {
-        if (!(_requestRelayoutIndex < 0 || _requestRelayoutIndex >= _units->size()))
+        if (!(_requestRelayoutIndex < 0 || _requestRelayoutIndex >= (LONGLONG)_units->size()))
         {
             Relayout();
         }
@@ -89,7 +89,7 @@ void PhotowallLayout::RelayoutRow(int itemIndex)
         rowFirstItemIndex = 0;
     }
 
-    for (int i = itemIndex; i < _units->size(); i++)
+    for (int i = itemIndex; i < (LONGLONG)_units->size(); i++)
     {
         if (_units->at(i)->RowIndex == _units->at(itemIndex)->RowIndex + 1)
         {
@@ -115,7 +115,7 @@ void PhotowallLayout::RelayoutRow(int itemIndex)
         double actualWidth = unit->DesiredSize.Width / overloadLength * itemLength;
         actualWidth = (int)(actualWidth + 0.5);
 
-        unit->ActualSize = Size(actualWidth, unit->DesiredSize.Height);
+        unit->ActualSize = Size((float)actualWidth, (float)unit->DesiredSize.Height);
         unit->ActualOffset = newOffset;
         newOffset += actualWidth + _spacing;
     }
@@ -123,13 +123,13 @@ void PhotowallLayout::RelayoutRow(int itemIndex)
     newOffset -= _spacing;
     if (newOffset != _width)
     {
-        _units->at(rowLastItemIndex)->ActualSize = Size(_width - newOffset + _units->at(rowLastItemIndex)->ActualSize.Width, _units->at(rowLastItemIndex)->ActualSize.Height);
+        _units->at(rowLastItemIndex)->ActualSize = Size((float)(_width - newOffset + _units->at(rowLastItemIndex)->ActualSize.Width),(float)( _units->at(rowLastItemIndex)->ActualSize.Height));
     }
 }
 
 LONGLONG PhotowallLayout::GetVisableItems(VisualWindow window, int* firstIndex, int * lastIndex)
 {
-    if (!(_requestRelayoutIndex < 0 || _requestRelayoutIndex >= _units->size()))
+    if (!(_requestRelayoutIndex < 0 || _requestRelayoutIndex >= (LONGLONG)_units->size()))
     {
         Relayout();
     }
@@ -146,9 +146,9 @@ LONGLONG PhotowallLayout::GetVisableItems(VisualWindow window, int* firstIndex, 
 
     int firstRowIndex, lastRowIndex, visableRowCount, newFirstIndex = -1, newLastIndex = -1;
 
-    firstRowIndex = floor((window.Offset + _spacing) / (_unitSize + _spacing));
-    visableRowCount = floor((window.Length + _spacing) / (_unitSize + _spacing));
-    lastRowIndex = floor((VisualWindowExtension::GetEndOffset(window) + _spacing) / (_unitSize + _spacing));
+    firstRowIndex = (int)floor((window.Offset + _spacing) / (_unitSize + _spacing));
+    visableRowCount = (int)floor((window.Length + _spacing) / (_unitSize + _spacing));
+    lastRowIndex = (int)floor((VisualWindowExtension::GetEndOffset(window) + _spacing) / (_unitSize + _spacing));
 
     int firstRow = 0;
     int lastRow = _units->at(_units->size() - 1)->RowIndex;
@@ -177,7 +177,7 @@ LONGLONG PhotowallLayout::GetVisableItems(VisualWindow window, int* firstIndex, 
 
         if (*firstIndex < 0)
         {
-            for (int i = 0; i < _units->size(); i++)
+            for (int i = 0; i < (LONGLONG)_units->size(); i++)
             {
                 if (_units->at(i)->RowIndex == firstRowIndex)
                 {
@@ -190,7 +190,7 @@ LONGLONG PhotowallLayout::GetVisableItems(VisualWindow window, int* firstIndex, 
         {
             if (_units->at(*firstIndex)->RowIndex < firstRowIndex)
             {
-                for (int i = *firstIndex; i < _units->size(); i++)
+                for (int i = *firstIndex; i < (LONGLONG)_units->size(); i++)
                 {
                     if (_units->at(i)->RowIndex == firstRowIndex)
                     {
@@ -219,7 +219,7 @@ LONGLONG PhotowallLayout::GetVisableItems(VisualWindow window, int* firstIndex, 
 
     if (*lastIndex < 0)
     {
-        for (int i = 0; i < _units->size(); i++)
+        for (int i = 0; i < (LONGLONG)_units->size(); i++)
         {
             if (_units->at(i)->RowIndex == lastRowIndex + 1)
             {
@@ -231,14 +231,14 @@ LONGLONG PhotowallLayout::GetVisableItems(VisualWindow window, int* firstIndex, 
     }
     else
     {
-        if (*lastIndex >= _units->size())
+        if (*lastIndex >= (LONGLONG)_units->size())
         {
             *lastIndex = _units->size() - 1;
         }
 
         if (_units->at(*lastIndex)->RowIndex < lastRowIndex)
         {
-            for (int i = *lastIndex; i < _units->size(); i++)
+            for (int i = *lastIndex; i < (LONGLONG)_units->size(); i++)
             {
                 if (_units->at(i)->RowIndex == lastRowIndex + 1)
                 {
@@ -283,7 +283,7 @@ LONGLONG PhotowallLayout::GetVisableItems(VisualWindow window, int* firstIndex, 
 
 Rect PhotowallLayout::GetItemLayoutRect(int index)
 {
-    if (!(_requestRelayoutIndex < 0 || _requestRelayoutIndex >= _units->size()))
+    if (!(_requestRelayoutIndex < 0 || _requestRelayoutIndex >= (LONGLONG)_units->size()))
     {
         Relayout();
     }
@@ -294,17 +294,17 @@ Rect PhotowallLayout::GetItemLayoutRect(int index)
 
     if (unit->RowIndex == _rowIndex && !_lastRowLocked)
     {
-        result.Height = unit->DesiredSize.Height;
-        result.Width = unit->DesiredSize.Width;
-        result.X = unit->Offset;
-        result.Y = unit->RowIndex * (_unitSize + _spacing) + _headerSize.Height;
+        result.Height = (float)unit->DesiredSize.Height;
+        result.Width = (float)unit->DesiredSize.Width;
+        result.X = (float)unit->Offset;
+        result.Y = (float)(unit->RowIndex * (_unitSize + _spacing) + _headerSize.Height);
     }
     else
     {
         result.Height = isinf(unit->ActualSize.Height) ? unit->DesiredSize.Height : unit->ActualSize.Height;
         result.Width = isinf(unit->ActualSize.Width) ? unit->DesiredSize.Width : unit->ActualSize.Width;
-        result.X = (unit->ActualOffset < 0) ? unit->Offset : unit->ActualOffset;
-        result.Y = unit->RowIndex * (_unitSize + _spacing) + _headerSize.Height;
+        result.X = (float)((unit->ActualOffset < 0) ? unit->Offset : unit->ActualOffset);
+        result.Y = (float)(unit->RowIndex * (_unitSize + _spacing) + _headerSize.Height);
     }
 
     return result;
@@ -352,7 +352,7 @@ void PhotowallLayout::ChangeItem(int index, Platform::Object^ item, Size size)
                 thisRowStartIndex = 0;
             }
 
-            for (int i = index; i < _units->size(); i++)
+            for (int i = index; i < (LONGLONG)_units->size(); i++)
             {
                 if (_units->at(i)->RowIndex == _units->at(index)->RowIndex + 1)
                 {
@@ -512,7 +512,7 @@ void PhotowallLayout::Relayout()
     _offset = 0;
     std::vector<int>* relayoutRows = new std::vector<int>();
 
-    for (int i = thisRowStartIndex; i < _units->size(); i++)
+    for (int i = thisRowStartIndex; i < (LONGLONG)_units->size(); i++)
     {
         auto unit = _units->at(i);
         double length = unit->DesiredSize.Width;
@@ -558,12 +558,12 @@ void PhotowallLayout::Relayout()
 
 Size PhotowallLayout::GetHeaderAvailableSize()
 {
-    return Size(Width, INFINITY);
+    return Size((float)Width, INFINITY);
 }
 
 Size PhotowallLayout::GetFooterAvailableSize()
 {
-    return Size(Width - _offset + Spacing, UnitSize);
+    return Size((float)(Width - _offset + Spacing), (float)UnitSize);
 }
 
 bool PhotowallLayout::SetHeaderSize(Size size)

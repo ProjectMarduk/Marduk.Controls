@@ -24,17 +24,17 @@ WaterfallFlowLayout::~WaterfallFlowLayout()
 
 void WaterfallFlowLayout::AddItem(int index, Platform::Object^ item, Size size)
 {
-    size.Width = (Width - ((StackCount - 1) * Spacing)) / StackCount;
+    size.Width = (float)((Width - ((StackCount - 1) * Spacing)) / StackCount);
     auto unit = ref new WaterfallFlowUnit(item, size);
 
-    if (index != -1 && index < _units->size())
+    if (index != -1 && index < (LONGLONG)_units->size())
     {
         _units->insert(_units->begin() + index, unit);
         SetRelayoutIndex(index);
     }
     else
     {
-        if (!(_requestRelayoutIndex < 0 || _requestRelayoutIndex >= _units->size()))
+        if (!(_requestRelayoutIndex < 0 || _requestRelayoutIndex >= (LONGLONG)_units->size()))
         {
             Relayout();
         }
@@ -59,7 +59,7 @@ void WaterfallFlowLayout::AddItem(int index, Platform::Object^ item, Size size)
 
 LONGLONG WaterfallFlowLayout::GetVisableItems(VisualWindow window, int* firstIndex, int * lastIndex)
 {
-    if (!(_requestRelayoutIndex < 0 || _requestRelayoutIndex >= _units->size()))
+    if (!(_requestRelayoutIndex < 0 || _requestRelayoutIndex >= (LONGLONG)_units->size()))
     {
         Relayout();
     }
@@ -77,7 +77,7 @@ LONGLONG WaterfallFlowLayout::GetVisableItems(VisualWindow window, int* firstInd
 
     if (*firstIndex < 0)
     {
-        for (int i = 0; i < _units->size(); i++)
+        for (int i = 0; i < (LONGLONG)_units->size(); i++)
         {
             if (_units->at(i)->Offset >= window.Offset)
             {
@@ -107,7 +107,7 @@ LONGLONG WaterfallFlowLayout::GetVisableItems(VisualWindow window, int* firstInd
             }
             else
             {
-                for (int i = *firstIndex; i < _units->size(); i++)
+                for (int i = *firstIndex; i < (LONGLONG)_units->size(); i++)
                 {
                     if (_units->at(i)->Offset + _units->at(i)->DesiredSize.Height >= window.Offset)
                     {
@@ -126,7 +126,7 @@ LONGLONG WaterfallFlowLayout::GetVisableItems(VisualWindow window, int* firstInd
 
     if (*lastIndex < 0)
     {
-        for (int i = *firstIndex; i < _units->size(); i++)
+        for (int i = *firstIndex; i < (LONGLONG)_units->size(); i++)
         {
             if (_units->at(i)->Offset >= VisualWindowExtension::GetEndOffset(window))
             {
@@ -156,7 +156,7 @@ LONGLONG WaterfallFlowLayout::GetVisableItems(VisualWindow window, int* firstInd
             }
             else
             {
-                for (int i = *lastIndex; i < _units->size(); i++)
+                for (int i = *lastIndex; i < (LONGLONG)_units->size(); i++)
                 {
                     if (_units->at(i)->Offset >= VisualWindowExtension::GetEndOffset(window))
                     {
@@ -183,7 +183,7 @@ LONGLONG WaterfallFlowLayout::GetVisableItems(VisualWindow window, int* firstInd
 
 Rect WaterfallFlowLayout::GetItemLayoutRect(int index)
 {
-    if (!(_requestRelayoutIndex < 0 || _requestRelayoutIndex >= _units->size()))
+    if (!(_requestRelayoutIndex < 0 || _requestRelayoutIndex >= (LONGLONG)_units->size()))
     {
         Relayout();
     }
@@ -195,8 +195,8 @@ Rect WaterfallFlowLayout::GetItemLayoutRect(int index)
 
     result.Height = unit->DesiredSize.Height;
     result.Width = unit->DesiredSize.Width;
-    result.X = unit->StackIndex * (unitWidth + Spacing);
-    result.Y = unit->Offset + _headerSize.Height;
+    result.X = (float)(unit->StackIndex * (unitWidth + Spacing));
+    result.Y = (float)(unit->Offset + _headerSize.Height);
 
     return result;
 }
@@ -265,7 +265,7 @@ void WaterfallFlowLayout::Relayout()
     std::vector<bool>* flags = new std::vector<bool>();
     int stackCount = 0;
 
-    for (int i = 0; i < _stacks->size(); i++)
+    for (int i = 0; i < (LONGLONG)_stacks->size(); i++)
     {
         (*_stacks)[i] = 0;
         flags->push_back(false);
@@ -288,11 +288,11 @@ void WaterfallFlowLayout::Relayout()
         }
     }
 
-    for (int i = _requestRelayoutIndex; i < _units->size(); i++)
+    for (int i = _requestRelayoutIndex; i < (LONGLONG)_units->size(); i++)
     {
         auto unit = _units->at(i);
 
-        Size size = Size((Width - Spacing) / _stacks->size(), unit->DesiredSize.Height);
+        Size size = Size((float)((Width - Spacing) / _stacks->size()), unit->DesiredSize.Height);
         unit->DesiredSize = size;
 
         int minStackIndex = std::distance(_stacks->begin(), std::min_element(_stacks->begin(), _stacks->end()));
@@ -329,7 +329,7 @@ void WaterfallFlowLayout::SetRelayoutIndex(int index)
 void WaterfallFlowLayout::RemoveAll()
 {
     _units->clear();
-    for (int i = 0; i < _stacks->size(); i++)
+    for (int i = 0; i < (LONGLONG)_stacks->size(); i++)
     {
         (*_stacks)[i] = 0;
     }
@@ -343,13 +343,13 @@ Size WaterfallFlowLayout::GetItemSize(int index)
 
 Size WaterfallFlowLayout::GetHeaderAvailableSize()
 {
-    return Size(Width, INFINITY);
+    return Size((float)Width, INFINITY);
 }
 
 Size WaterfallFlowLayout::GetFooterAvailableSize()
 {
     auto width = (Width - ((StackCount - 1) * Spacing)) / StackCount;
-    return Size(width, (*std::max_element(_stacks->begin(), _stacks->end())) - (*std::min_element(_stacks->begin(), _stacks->end())));
+    return Size((float)width, (float)((*std::max_element(_stacks->begin(), _stacks->end())) - (*std::min_element(_stacks->begin(), _stacks->end()))));
 }
 
 bool WaterfallFlowLayout::SetHeaderSize(Size size)
@@ -381,5 +381,5 @@ Rect WaterfallFlowLayout::GetFooterLayoutRect()
 {
     auto width = (Width - ((StackCount - 1) * Spacing)) / StackCount;
     int minStackIndex = std::distance(_stacks->begin(), std::min_element(_stacks->begin(), _stacks->end()));
-    return Rect(minStackIndex * (width + Spacing), _stacks->at(minStackIndex) + Spacing + _headerSize.Height, _footerSize.Width, _footerSize.Height);
+    return Rect((float)(minStackIndex * (width + Spacing)), (float)(_stacks->at(minStackIndex) + Spacing + _headerSize.Height), _footerSize.Width, _footerSize.Height);
 }

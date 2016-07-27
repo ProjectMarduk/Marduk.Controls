@@ -54,7 +54,7 @@ Size PhotowallView::MeasureOverride(Size availableSize)
 Size PhotowallView::GetItemAvailableSize(Size availableSize)
 {
     availableSize.Width = INFINITY;
-    availableSize.Height = UnitSize;
+    availableSize.Height = (float)UnitSize;
     return availableSize;
 }
 

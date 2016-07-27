@@ -75,7 +75,7 @@ void WaterfallFlowView::RegisterDependencyProperties()
 
 Size WaterfallFlowView::GetItemAvailableSize(Size availableSize)
 {
-    availableSize.Width = (availableSize.Width - ((StackCount - 1) * Spacing)) / StackCount;
+    availableSize.Width =(float)( (availableSize.Width - ((StackCount - 1) * Spacing)) / StackCount);
     return availableSize;
 }
 
@@ -173,7 +173,7 @@ void WaterfallFlowView::ResetStackCount()
     if (IsAdaptiveEnable)
     {
         auto aw = ActualWidth;
-        Size unit = GetItemAvailableSize(Size(ActualWidth, INFINITY));
+        Size unit = GetItemAvailableSize(Size((float)ActualWidth, INFINITY));
         if (unit.Width < MinItemWidth || unit.Width > MaxItemWidth)
         {
             int stackCount = 1;
@@ -181,7 +181,7 @@ void WaterfallFlowView::ResetStackCount()
             {
                 for (int count = StackCount - 1; count > 1; count--)
                 {
-                    float width = (ActualWidth - ((count - 1) * Spacing)) / count;
+                    float width = (float)((ActualWidth - ((count - 1) * Spacing)) / count);
                     if (width > MinItemWidth)
                     {
                         stackCount = count;
@@ -193,7 +193,7 @@ void WaterfallFlowView::ResetStackCount()
             {
                 for (int count = StackCount + 1; true; count++)
                 {
-                    float width = (ActualWidth - ((count - 1) * Spacing)) / count;
+                    float width = (float)((ActualWidth - ((count - 1) * Spacing)) / count);
                     if (width < MaxItemWidth)
                     {
                         stackCount = count;

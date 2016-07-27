@@ -110,11 +110,11 @@ Size OrientedVirtualizingPanel::MeasureOverride(Size availableSize)
 
     if (_scrollViewOffset.X < 0 || _scrollViewOffset.Y < 0)
     {
-        _scrollViewOffset = Point(_parentScrollView->HorizontalOffset, _parentScrollView->VerticalOffset);
+        _scrollViewOffset = Point((float)(_parentScrollView->HorizontalOffset), (float)(_parentScrollView->VerticalOffset));
     }
-    _requestWindow = GetVisibleWindow(_scrollViewOffset, Size(_parentScrollView->ViewportWidth, _parentScrollView->ViewportHeight));
+    _requestWindow = GetVisibleWindow(_scrollViewOffset, Size((float)_parentScrollView->ViewportWidth, (float)_parentScrollView->ViewportHeight));
 
-    for (int i = _layout->UnitCount; i < Items->Size; i++)
+    for (int i = _layout->UnitCount; i < (LONGLONG)Items->Size; i++)
     {
         if (_layout->FillWindow(_requestWindow))
         {
@@ -244,11 +244,11 @@ Size OrientedVirtualizingPanel::ArrangeOverride(Size finalSize)
 void OrientedVirtualizingPanel::OnViewChanging(Object^ sender, WinCon::ScrollViewerViewChangingEventArgs ^ e)
 {
     auto i = e->FinalView;
-    int viewIndex = floor(e->NextView->VerticalOffset / (_parentScrollView->ViewportHeight / 2)) + 1;
+    int viewIndex = (int)floor(e->NextView->VerticalOffset / (_parentScrollView->ViewportHeight / 2)) + 1;
     if (viewIndex != _viewIndex)
     {
         _viewIndex = viewIndex;
-        _scrollViewOffset = Point(e->NextView->HorizontalOffset, e->NextView->VerticalOffset);
+        _scrollViewOffset = Point((float)e->NextView->HorizontalOffset, (float)e->NextView->VerticalOffset);
         InvalidateMeasure();
         InvalidateArrange();
     }
@@ -280,7 +280,7 @@ void OrientedVirtualizingPanel::OnItemsChanged(IObservableVector<Object^>^ sourc
     case CollectionChange::ItemInserted:
         if (e->Index != Items->Size - 1)
         {
-            if (e->Index <= _layout->UnitCount)
+            if ((LONGLONG)e->Index <= _layout->UnitCount)
             {
                 _layout->AddItem(e->Index, Items->GetAt(e->Index), MeasureItem(Items->GetAt(e->Index), Size(0, 0)));
             }
@@ -297,7 +297,7 @@ void OrientedVirtualizingPanel::OnItemsChanged(IObservableVector<Object^>^ sourc
         InvalidateArrange();
         break;
     case CollectionChange::ItemRemoved:
-        if (e->Index < _layout->UnitCount)
+        if ((LONGLONG)e->Index < _layout->UnitCount)
         {
             _layout->RemoveItem(e->Index);
 
@@ -306,7 +306,7 @@ void OrientedVirtualizingPanel::OnItemsChanged(IObservableVector<Object^>^ sourc
         }
         break;
     case CollectionChange::ItemChanged:
-        if (e->Index < _layout->UnitCount)
+        if ((LONGLONG)e->Index < _layout->UnitCount)
         {
             _layout->ChangeItem(e->Index, Items->GetAt(e->Index), MeasureItem(Items->GetAt(e->Index), Size(0, 0)));
 

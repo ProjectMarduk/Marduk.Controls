@@ -357,7 +357,7 @@ VirtualizingViewItem^ VirtualizingPanel::GetContainerFormItem(Object^ item)
 
 VirtualizingViewItem^ VirtualizingPanel::GetContainerFormIndex(int index)
 {
-    if (index < 0 || index >= _items->Size)
+    if (index < 0 || (UINT)index >= _items->Size)
     {
         throw ref new OutOfBoundsException("Index out of bounds.");
     }
@@ -387,7 +387,7 @@ Object^ VirtualizingPanel::GetItemFormContainer(VirtualizingViewItem^ container)
 
 Object^ VirtualizingPanel::GetItemFormIndex(int index)
 {
-    if (index < 0 || index >= _items->Size)
+    if (index < 0 || (UINT)index >= _items->Size)
     {
         throw ref new OutOfBoundsException("Index out of bounds.");
     }
@@ -623,7 +623,7 @@ void VirtualizingPanel::OnCollectionChanged(Object^ sender, Windows::UI::Xaml::I
         throw Exception::CreateException(-1, "Unexpected collection operation.");
         break;
     case Windows::UI::Xaml::Interop::NotifyCollectionChangedAction::Remove:
-        for (int i = 0; i < e->OldItems->Size; i++)
+        for (int i = 0; i < (LONGLONG)e->OldItems->Size; i++)
         {
             RecycleItem(e->OldItems->GetAt(i));
             _items->RemoveAt(e->OldStartingIndex + i);
@@ -740,7 +740,7 @@ VirtualizingViewItem^  VirtualizingPanel::RealizeItem(Object^ item)
     _itemContainerMap->Insert(item, container);
     container->SizeChangedToken = container->SizeChanged += ref new Windows::UI::Xaml::SizeChangedEventHandler(this, &Marduk::Controls::VirtualizingPanel::OnItemSizeChanged);
     Children->Append(container);
-    
+
     return container;
 }
 
@@ -793,7 +793,7 @@ void VirtualizingPanel::CreateHeaderContainer()
         _headerContainer->Style = HeaderContainerStyle;
         _headerContainer->ContentTemplate = HeaderTemplate;
         _headerContainer->Content = Header;
-		_headerContainer->HorizontalContentAlignment = Windows::UI::Xaml::HorizontalAlignment::Stretch;
+        _headerContainer->HorizontalContentAlignment = Windows::UI::Xaml::HorizontalAlignment::Stretch;
         Children->InsertAt(0, _headerContainer);
     }
 }
@@ -806,7 +806,7 @@ void VirtualizingPanel::CreateFooterContainer()
         _footerContainer->Style = FooterContainerStyle;
         _footerContainer->ContentTemplate = FooterTemplate;
         _footerContainer->Content = Footer;
-		_footerContainer->HorizontalContentAlignment = Windows::UI::Xaml::HorizontalAlignment::Stretch;
+        _footerContainer->HorizontalContentAlignment = Windows::UI::Xaml::HorizontalAlignment::Stretch;
         Children->InsertAt(0, _footerContainer);
     }
 }
