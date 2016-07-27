@@ -25,6 +25,7 @@ namespace Marduk
             Right
         };
 
+        [Windows::Foundation::Metadata::WebHostHidden()]
         public ref class ItemTappedEventArgs sealed
         {
         public:
@@ -40,7 +41,8 @@ namespace Marduk
             VirtualizingViewItem^ _container;
             ItemTapMode _tapMode;
         };
-
+        
+        [Windows::Foundation::Metadata::WebHostHidden()]
         public ref class SeletionChangedEventArgs sealed
         {
         internal:
@@ -48,12 +50,15 @@ namespace Marduk
 
         private:
         };
-
+        
+        [Windows::Foundation::Metadata::WebHostHidden()]
         public delegate void ItemTappedEventHandler(Platform::Object^ sender, ItemTappedEventArgs^ e);
-
+        
+        [Windows::Foundation::Metadata::WebHostHidden()]
         public delegate void SeletionChangedEventHandler(Platform::Object^ sender, SeletionChangedEventArgs^ e);
 
         [Windows::UI::Xaml::Markup::ContentPropertyAttribute(Name = "Items")]
+        [Windows::Foundation::Metadata::WebHostHidden()]
         public ref class VirtualizingPanel :
             public ::WinCon::Panel
         {

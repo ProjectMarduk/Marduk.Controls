@@ -854,7 +854,7 @@ void VirtualizingPanel::OnHeaderChanged(Platform::Object^ newHeader, Platform::O
         unsigned int index;
         Children->IndexOf(_headerContainer, &index);
         Children->RemoveAt(index);
-        _headerContainer == nullptr;
+        _headerContainer = nullptr;
         return;
     }
 
@@ -914,7 +914,7 @@ void VirtualizingPanel::OnFooterChanged(Platform::Object^ newFooter, Platform::O
         unsigned int index;
         Children->IndexOf(_footerContainer, &index);
         Children->RemoveAt(index);
-        _footerContainer == nullptr;
+        _footerContainer = nullptr;
         return;
     }
 

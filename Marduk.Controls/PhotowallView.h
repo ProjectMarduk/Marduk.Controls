@@ -7,6 +7,7 @@ namespace Marduk
 {
     namespace Controls
     {
+        [Windows::Foundation::Metadata::WebHostHidden()]
         public ref class PhotowallView sealed :
             public OrientedVirtualizingPanel
         {

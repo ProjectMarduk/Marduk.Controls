@@ -10,7 +10,7 @@ namespace Marduk
 {
     namespace Controls
     {
-        // Waterfall flow layout panel with virtualization
+        [Windows::Foundation::Metadata::WebHostHidden()]
         public ref class WaterfallFlowView sealed :
             public OrientedVirtualizingPanel
         {

@@ -8,6 +8,7 @@ namespace Marduk
 {
     namespace Controls
     {
+        [Windows::Foundation::Metadata::WebHostHidden()]
         public ref class OrientedVirtualizingPanel :
             public VirtualizingPanel
         {

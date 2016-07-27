@@ -15,6 +15,7 @@ namespace Marduk
 {
     namespace Controls
     {
+        [Windows::Foundation::Metadata::WebHostHidden()]
         public ref class VirtualizingViewItem sealed : 
             public WinCon::ContentControl
         {

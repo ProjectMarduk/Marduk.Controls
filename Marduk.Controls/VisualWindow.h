@@ -4,6 +4,7 @@ namespace Marduk
 {
     namespace Controls
     {
+        [Windows::Foundation::Metadata::WebHostHidden()]
         public value struct VisualWindow sealed
         {
         public:
@@ -11,6 +12,7 @@ namespace Marduk
             double Length = 0;
         };
         
+        [Windows::Foundation::Metadata::WebHostHidden()]
         public ref class VisualWindowExtension sealed
         {
         public:
