@@ -83,7 +83,7 @@ Size WaterfallFlowView::GetItemAvailableSize(Size availableSize)
 
 bool WaterfallFlowView::NeedRelayout(Size availableSize)
 {
-    ResetStackCount();
+    ResetStackCount(availableSize);
     return OrientedVirtualizingPanel::NeedRelayout(availableSize) || WaterfallFlow->Spacing != Spacing || WaterfallFlow->StackCount != StackCount;
 }
 
@@ -190,6 +190,13 @@ void WaterfallFlowView::OnMinItemWidthChangedStatic(DependencyObject^ sender, Wi
 
 void WaterfallFlowView::ResetStackCount()
 {
+    ResetStackCount(Size((float)ActualWidth, (float)ActualWidth));
+}
+
+
+void WaterfallFlowView::ResetStackCount(Size availableSize)
+{
+    float width = availableSize.Width;
     switch (this->AdaptiveMode)
     {
     default:
@@ -197,16 +204,14 @@ void WaterfallFlowView::ResetStackCount()
         break;
     case Marduk::Controls::AdaptiveMode::MinBased:
     {
-        auto aw = (float)ActualWidth;
-        int maxStackCount = (int)((aw + Spacing) / (MinItemWidth + Spacing));
+        int maxStackCount = (int)((width + Spacing) / (MinItemWidth + Spacing));
         StackCount = max(maxStackCount, 1);
     }
     break;
     case Marduk::Controls::AdaptiveMode::MaxBased:
     {
-        auto aw = (float)ActualWidth;
-        int minStackCount = (int)((aw + Spacing) / (MaxItemWidth + Spacing));
-        StackCount = max(minStackCount,1);
+        int minStackCount = (int)((width + Spacing) / (MaxItemWidth + Spacing));
+        StackCount = max(minStackCount, 1);
     }
     break;
     }

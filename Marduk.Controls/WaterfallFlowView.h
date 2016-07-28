@@ -47,6 +47,7 @@ namespace Marduk
             static void OnMinItemWidthChangedStatic(DependencyObject^ sender, Windows::UI::Xaml::DependencyPropertyChangedEventArgs^ e);
 
             void ResetStackCount();
+            void ResetStackCount(Size availableSize);
         };
     }
 }
