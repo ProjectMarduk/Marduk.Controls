@@ -108,8 +108,8 @@ void WaterfallFlowView::OnSpacingChangedStatic(DependencyObject^ sender, Windows
         return;
     }
 
-    panel->InvalidateMeasure();
-    panel->InvalidateArrange();
+    panel->RequestMeasure();
+    panel->RequestArrange();
 }
 
 void WaterfallFlowView::OnStackCountChangedStatic(DependencyObject^ sender, Windows::UI::Xaml::DependencyPropertyChangedEventArgs^ e)
@@ -121,8 +121,8 @@ void WaterfallFlowView::OnStackCountChangedStatic(DependencyObject^ sender, Wind
         return;
     }
 
-    panel->InvalidateMeasure();
-    panel->InvalidateArrange();
+    panel->RequestMeasure();
+    panel->RequestArrange();
 }
 
 void WaterfallFlowView::OnAdaptiveModeChangedStatic(DependencyObject^ sender, Windows::UI::Xaml::DependencyPropertyChangedEventArgs^ e)

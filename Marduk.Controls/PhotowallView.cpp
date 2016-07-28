@@ -85,8 +85,8 @@ void PhotowallView::OnSpacingChangedStatic(DependencyObject^ sender, Windows::UI
         return;
     }
 
-    panel->InvalidateMeasure();
-    panel->InvalidateArrange();
+    panel->RequestMeasure();
+    panel->RequestArrange();
 }
 
 void PhotowallView::OnUnitSizeChangedStatic(DependencyObject^ sender, Windows::UI::Xaml::DependencyPropertyChangedEventArgs^ e)
@@ -98,6 +98,6 @@ void PhotowallView::OnUnitSizeChangedStatic(DependencyObject^ sender, Windows::U
         return;
     }
 
-    panel->InvalidateMeasure();
-    panel->InvalidateArrange();
+    panel->RequestMeasure();
+    panel->RequestArrange();
 }

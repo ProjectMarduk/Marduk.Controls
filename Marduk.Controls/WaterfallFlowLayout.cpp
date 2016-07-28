@@ -214,9 +214,9 @@ void WaterfallFlowLayout::ChangeItem(int index, Platform::Object^ item, Size siz
         _units->at(index)->Item = item;
     }
 
-    if (size.Height != _units->at(index)->DesiredSize.Height)
+    if (size != _units->at(index)->DesiredSize)
     {
-        _units->at(index)->DesiredSize = Size(_units->at(index)->DesiredSize.Width, size.Height);
+        _units->at(index)->DesiredSize = size;
         SetRelayoutIndex(index);
     }
 }
@@ -292,8 +292,9 @@ void WaterfallFlowLayout::Relayout()
     {
         auto unit = _units->at(i);
 
-        Size size = Size((float)((Width - Spacing) / _stacks->size()), unit->DesiredSize.Height);
-        unit->DesiredSize = size;
+        Size size = unit->DesiredSize;
+        //Size((float)((Width - Spacing) / _stacks->size()), unit->DesiredSize.Height);
+        //unit->DesiredSize = size;
 
         int minStackIndex = (int)std::distance(_stacks->begin(), std::min_element(_stacks->begin(), _stacks->end()));
         unit->StackIndex = minStackIndex;

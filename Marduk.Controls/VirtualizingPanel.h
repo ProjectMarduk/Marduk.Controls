@@ -138,6 +138,34 @@ namespace Marduk
             void LoadMoreItems(int count);
             void LoadMoreItems();
 
+            void RequestArrange()
+            {
+                if(!_requestArrange)
+                {
+                    _requestArrange = true;
+                    InvalidateArrange();
+                }
+            }
+            void RequestMeasure()
+            {
+                if (!_requestMeasure)
+                {
+                    _requestMeasure = true;
+                    InvalidateMeasure();
+                }
+            }
+
+            virtual Size MeasureOverride(Size availableSize) override
+            {
+                _requestMeasure = false;
+                return availableSize;
+            }
+            virtual Size ArrangeOverride(Size finalSize) override
+            {
+                _requestArrange = false;
+                return finalSize;
+            }
+
             VirtualizingViewItem^ GetContainerFormItem(Platform::Object^ item);
             VirtualizingViewItem^ GetContainerFormIndex(int index);
             Platform::Object^ GetItemFormContainer(VirtualizingViewItem^ container);
@@ -183,6 +211,9 @@ namespace Marduk
             bool _userSelecting = false;
             bool _isShiftSelectEnable = true;
             bool _isRightTapSelectEnable = true;
+
+            bool _requestMeasure = false;
+            bool _requestArrange = false;
             
             WinCon::ContentControl^ _headerContainer;
             WinCon::ContentControl^ _footerContainer;
