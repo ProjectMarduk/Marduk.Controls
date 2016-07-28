@@ -1,7 +1,9 @@
 #include "pch.h"
 #include "VirtualizingPanel.h"
+#include <ppltasks.h>
 
 using namespace Marduk::Controls;
+using namespace concurrency;
 
 DependencyProperty^ VirtualizingPanel::_itemContainerStyleProperty = nullptr;
 DependencyProperty^ VirtualizingPanel::_itemContainerStyleSelectorProperty = nullptr;
@@ -763,9 +765,13 @@ void VirtualizingPanel::LoadMoreItems(int count)
 {
     if (_sil != nullptr)
     {
-        if (_sil->HasMoreItems)
+        if (_sil->HasMoreItems && !_moreItemsLoading)
         {
-            _sil->LoadMoreItemsAsync(count);
+            _moreItemsLoading = true;
+            concurrency::create_task(_sil->LoadMoreItemsAsync(count)).then([this](Windows::UI::Xaml::Data::LoadMoreItemsResult result)
+            {
+                _moreItemsLoading = false;
+            });
         }
     }
 }

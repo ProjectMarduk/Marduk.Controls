@@ -5,9 +5,11 @@ using namespace Marduk::Controls;
 
 DependencyProperty^ WaterfallFlowView::_spacingProperty = nullptr;
 DependencyProperty^ WaterfallFlowView::_stackCountProperty = nullptr;
-DependencyProperty^ WaterfallFlowView::_isAdaptiveEnableProperty = nullptr;
+DependencyProperty^ WaterfallFlowView::_adaptiveModeProperty = nullptr;
 DependencyProperty^ WaterfallFlowView::_maxItemWidthProperty = nullptr;
 DependencyProperty^ WaterfallFlowView::_minItemWidthProperty = nullptr;
+
+
 
 WaterfallFlowView::WaterfallFlowView()
 {
@@ -39,15 +41,15 @@ void WaterfallFlowView::RegisterDependencyProperties()
                     &WaterfallFlowView::OnStackCountChangedStatic)));
     }
 
-    if (_isAdaptiveEnableProperty == nullptr)
+    if (_adaptiveModeProperty == nullptr)
     {
-        _isAdaptiveEnableProperty = DependencyProperty::Register(
-            nameof(IsAdaptiveEnable),
-            typeof(bool),
+        _adaptiveModeProperty = DependencyProperty::Register(
+            nameof(AdaptiveMode),
+            typeof(Marduk::Controls::AdaptiveMode),
             typeof(WaterfallFlowView),
             ref new PropertyMetadata(false,
                 ref new PropertyChangedCallback(
-                    &WaterfallFlowView::OnIsAdaptiveEnableChangedStatic)));
+                    &WaterfallFlowView::OnAdaptiveModeChangedStatic)));
     }
 
     if (_maxItemWidthProperty == nullptr)
@@ -75,7 +77,7 @@ void WaterfallFlowView::RegisterDependencyProperties()
 
 Size WaterfallFlowView::GetItemAvailableSize(Size availableSize)
 {
-    availableSize.Width =(float)( (availableSize.Width - ((StackCount - 1) * Spacing)) / StackCount);
+    availableSize.Width = (float)((availableSize.Width - ((StackCount - 1) * Spacing)) / StackCount);
     return availableSize;
 }
 
@@ -123,7 +125,7 @@ void WaterfallFlowView::OnStackCountChangedStatic(DependencyObject^ sender, Wind
     panel->InvalidateArrange();
 }
 
-void WaterfallFlowView::OnIsAdaptiveEnableChangedStatic(DependencyObject^ sender, Windows::UI::Xaml::DependencyPropertyChangedEventArgs^ e)
+void WaterfallFlowView::OnAdaptiveModeChangedStatic(DependencyObject^ sender, Windows::UI::Xaml::DependencyPropertyChangedEventArgs^ e)
 {
     auto panel = dynamic_cast<WaterfallFlowView^>(sender);
 
@@ -132,9 +134,15 @@ void WaterfallFlowView::OnIsAdaptiveEnableChangedStatic(DependencyObject^ sender
         return;
     }
 
-    if (panel->IsAdaptiveEnable)
+    switch (panel->AdaptiveMode)
     {
+    default:
+    case Marduk::Controls::AdaptiveMode::Disable:
+        break;
+    case Marduk::Controls::AdaptiveMode::MaxBased:
+    case Marduk::Controls::AdaptiveMode::MinBased:
         panel->ResetStackCount();
+        break;
     }
 }
 
@@ -147,9 +155,15 @@ void WaterfallFlowView::OnMaxItemWidthChangedStatic(DependencyObject^ sender, Wi
         return;
     }
 
-    if (panel->IsAdaptiveEnable)
+    switch (panel->AdaptiveMode)
     {
+    default:
+    case Marduk::Controls::AdaptiveMode::Disable:
+    case Marduk::Controls::AdaptiveMode::MinBased:
+        break;
+    case Marduk::Controls::AdaptiveMode::MaxBased:
         panel->ResetStackCount();
+        break;
     }
 }
 
@@ -162,47 +176,64 @@ void WaterfallFlowView::OnMinItemWidthChangedStatic(DependencyObject^ sender, Wi
         return;
     }
 
-    if (panel->IsAdaptiveEnable)
+    switch (panel->AdaptiveMode)
     {
+    default:
+    case Marduk::Controls::AdaptiveMode::Disable:
+    case Marduk::Controls::AdaptiveMode::MaxBased:
+        break;
+    case Marduk::Controls::AdaptiveMode::MinBased:
         panel->ResetStackCount();
+        break;
     }
 }
 
 void WaterfallFlowView::ResetStackCount()
 {
-    if (IsAdaptiveEnable)
+    switch (this->AdaptiveMode)
+    {
+    default:
+    case Marduk::Controls::AdaptiveMode::Disable:
+        break;
+    case Marduk::Controls::AdaptiveMode::MinBased:
     {
         auto aw = ActualWidth;
         Size unit = GetItemAvailableSize(Size((float)ActualWidth, INFINITY));
-        if (unit.Width < MinItemWidth || unit.Width > MaxItemWidth)
+        if (unit.Width < MinItemWidth)
         {
             int stackCount = 1;
-            if (unit.Width < MinItemWidth)
+            for (int count = StackCount - 1; count > 1; count--)
             {
-                for (int count = StackCount - 1; count > 1; count--)
+                float width = (float)((ActualWidth - ((count - 1) * Spacing)) / count);
+                if (width > MinItemWidth)
                 {
-                    float width = (float)((ActualWidth - ((count - 1) * Spacing)) / count);
-                    if (width > MinItemWidth)
-                    {
-                        stackCount = count;
-                        break;
-                    }
+                    stackCount = count;
+                    break;
                 }
             }
-            else
-            {
-                for (int count = StackCount + 1; true; count++)
-                {
-                    float width = (float)((ActualWidth - ((count - 1) * Spacing)) / count);
-                    if (width < MaxItemWidth)
-                    {
-                        stackCount = count;
-                        break;
-                    }
-                }
-            }
-
             StackCount = stackCount;
         }
+    }
+    break;
+    case Marduk::Controls::AdaptiveMode::MaxBased:
+    {
+        auto aw = ActualWidth;
+        Size unit = GetItemAvailableSize(Size((float)ActualWidth, INFINITY));
+        if (unit.Width > MaxItemWidth)
+        {
+            int stackCount = 1;
+            for (int count = StackCount + 1; true; count++)
+            {
+                float width = (float)((ActualWidth - ((count - 1) * Spacing)) / count);
+                if (width < MaxItemWidth)
+                {
+                    stackCount = count;
+                    break;
+                }
+            }
+            StackCount = stackCount;
+        }
+    }
+    break;
     }
 }

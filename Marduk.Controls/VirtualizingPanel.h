@@ -172,6 +172,7 @@ namespace Marduk
             Vector<Platform::Object^>^ _items;
             Windows::UI::Xaml::Data::ISupportIncrementalLoading^ _sil;
             int _loadCount = 0;
+            bool _moreItemsLoading = false;
 
             RegisterReadOnlyProperty(bool, _shiftSelecting || _rightTapSelecting || _userSelecting, Selecting);
 

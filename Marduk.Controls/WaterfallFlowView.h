@@ -10,13 +10,20 @@ namespace Marduk
 {
     namespace Controls
     {
+		public enum class AdaptiveMode
+		{
+			Disable,
+			MaxBased,
+			MinBased
+		};
+
         [Windows::Foundation::Metadata::WebHostHidden()]
         public ref class WaterfallFlowView sealed :
             public OrientedVirtualizingPanel
         {
             RegisterDependencyProperty(double, _spacingProperty, SpacingProperty, Spacing);
             RegisterDependencyProperty(int, _stackCountProperty, StackCountProperty, StackCount);
-            RegisterDependencyProperty(bool, _isAdaptiveEnableProperty, IsAdaptiveEnableProperty, IsAdaptiveEnable);
+            RegisterDependencyProperty(Marduk::Controls::AdaptiveMode, _adaptiveModeProperty, AdaptiveModeProperty, AdaptiveMode);
             RegisterDependencyProperty(int , _maxItemWidthProperty, MaxItemWidthProperty, MaxItemWidth);
             RegisterDependencyProperty(int , _minItemWidthProperty, MinItemWidthProperty, MinItemWidth);
 
@@ -35,7 +42,7 @@ namespace Marduk
                 WaterfallFlowLayout^ _waterfallFlowLayout;
             static void OnSpacingChangedStatic(DependencyObject^ sender, Windows::UI::Xaml::DependencyPropertyChangedEventArgs^ e);
             static void OnStackCountChangedStatic(DependencyObject^ sender, Windows::UI::Xaml::DependencyPropertyChangedEventArgs^ e);
-            static void OnIsAdaptiveEnableChangedStatic(DependencyObject^ sender, Windows::UI::Xaml::DependencyPropertyChangedEventArgs^ e);
+            static void OnAdaptiveModeChangedStatic(DependencyObject^ sender, Windows::UI::Xaml::DependencyPropertyChangedEventArgs^ e);
             static void OnMaxItemWidthChangedStatic(DependencyObject^ sender, Windows::UI::Xaml::DependencyPropertyChangedEventArgs^ e);
             static void OnMinItemWidthChangedStatic(DependencyObject^ sender, Windows::UI::Xaml::DependencyPropertyChangedEventArgs^ e);
 
