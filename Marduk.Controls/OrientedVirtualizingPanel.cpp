@@ -6,12 +6,9 @@ using namespace Marduk::Controls;
 OrientedVirtualizingPanel::OrientedVirtualizingPanel()
 {
 	_timer = ref new Windows::UI::Xaml::DispatcherTimer();
-
-	_timer->Interval = TimeSpan{ 100000 };
+	_timer->Interval = TimeSpan{ 10000 };
 	_timer->Tick += ref new Windows::Foundation::EventHandler<Object ^>(this, &OrientedVirtualizingPanel::OnTick);
 
-    Loaded += ref new Windows::UI::Xaml::RoutedEventHandler(this, &Marduk::Controls::OrientedVirtualizingPanel::OnLoaded);
-    Unloaded += ref new Windows::UI::Xaml::RoutedEventHandler(this, &Marduk::Controls::OrientedVirtualizingPanel::OnUnloaded);
 	auto mc = MeasureControl;
 }
 
@@ -19,13 +16,12 @@ void OrientedVirtualizingPanel::OnTick(Object^ sender, Object^e)
 {
 	_timer->Stop();
 	_isSkip = false;
-    RequestMeasure();
-    RequestArrange();
+	InvalidateMeasure();
+	InvalidateArrange();
 }
 
 Size OrientedVirtualizingPanel::MeasureOverride(Size availableSize)
 {
-    VirtualizingPanel::MeasureOverride(availableSize);
 	if (_parentScrollView == nullptr)
 	{
 		_parentScrollView = dynamic_cast<WinCon::ScrollViewer^>(this->Parent);
@@ -34,8 +30,6 @@ Size OrientedVirtualizingPanel::MeasureOverride(Size availableSize)
 		{
 			_parentScrollView->ViewChanging += ref new Windows::Foundation::EventHandler<WinCon::ScrollViewerViewChangingEventArgs ^>(this, &OrientedVirtualizingPanel::OnViewChanging);
 			_sizeChangedToken = _parentScrollView->SizeChanged += ref new Windows::UI::Xaml::SizeChangedEventHandler(this, &OrientedVirtualizingPanel::OnSizeChanged);
-            _parentScrollView->Loaded += ref new Windows::UI::Xaml::RoutedEventHandler(this, &Marduk::Controls::OrientedVirtualizingPanel::OnScrollViewLoaded);
-            _parentScrollView->Unloaded += ref new Windows::UI::Xaml::RoutedEventHandler(this, &Marduk::Controls::OrientedVirtualizingPanel::OnScrollViewUnloaded);
 		}
 	}
 
@@ -134,7 +128,7 @@ Size OrientedVirtualizingPanel::MeasureOverride(Size availableSize)
 		_layout->AddItem(i, Items->GetAt(i), itemSize);
 	}
 
-	if ((_scrollViewOffset.X > 0 || _scrollViewOffset.Y > 0 )&& !_layout->FillWindow(_requestWindow))
+	if (!_layout->FillWindow(_requestWindow))
 	{
 		LoadMoreItems();
 	}
@@ -154,7 +148,7 @@ Size OrientedVirtualizingPanel::MeasureOverride(Size availableSize)
 
 	auto children = Children;
 
-	if ((_itemAvailableSizeCache.Width == _itemAvailableSize.Width && _itemAvailableSizeCache.Height == _itemAvailableSize.Height))
+	if (false || (_itemAvailableSizeCache.Width == _itemAvailableSize.Width && _itemAvailableSizeCache.Height == _itemAvailableSize.Height))
 	{
 		for (auto item : *needRealizeItems)
 		{
@@ -187,20 +181,20 @@ Size OrientedVirtualizingPanel::MeasureOverride(Size availableSize)
 
 	if (HeaderContainer != nullptr)
 	{
-		//OnHeaderMeasureOverride(availableSize);
+		OnHeaderMeasureOverride(availableSize);
 	}
 
 	if (FooterContainer != nullptr)
 	{
-		//if (_lastRealizationItemIndex + 1 == Items->Size)
-		//{
-		//	FooterContainer->Visibility = Windows::UI::Xaml::Visibility::Visible;
-		//}
-		//else
-		//{
-		//	FooterContainer->Visibility = Windows::UI::Xaml::Visibility::Collapsed;
-		//}
-		//OnFooterMeasureOverride(availableSize);
+		if (_lastRealizationItemIndex + 1 == Items->Size)
+		{
+			FooterContainer->Visibility = Windows::UI::Xaml::Visibility::Visible;
+		}
+		else
+		{
+			FooterContainer->Visibility = Windows::UI::Xaml::Visibility::Collapsed;
+		}
+		OnFooterMeasureOverride(availableSize);
 	}
 
 	return _layout->LayoutSize;
@@ -215,7 +209,6 @@ Point OrientedVirtualizingPanel::MakeItemVisable(int index)
 
 Size OrientedVirtualizingPanel::ArrangeOverride(Size finalSize)
 {
-    VirtualizingPanel::ArrangeOverride(finalSize);
 	if (_isSkip)
 	{
 		return finalSize;
@@ -240,12 +233,12 @@ Size OrientedVirtualizingPanel::ArrangeOverride(Size finalSize)
 
 	if (HeaderContainer != nullptr)
 	{
-		//OnHeaderArrangeOverride(finalSize);
+		OnHeaderArrangeOverride(finalSize);
 	}
 
 	if (FooterContainer != nullptr)
 	{
-		//OnFooterArrangeOverride(finalSize);
+		OnFooterArrangeOverride(finalSize);
 	}
 
 	return finalSize;
@@ -259,24 +252,24 @@ void OrientedVirtualizingPanel::OnViewChanging(Object^ sender, WinCon::ScrollVie
 	{
 		_viewIndex = viewIndex;
 		_scrollViewOffset = Point((float)e->NextView->HorizontalOffset, (float)e->NextView->VerticalOffset);
-        RequestMeasure();
-        RequestArrange();
+		InvalidateMeasure();
+		InvalidateArrange();
 	}
 }
 
 void OrientedVirtualizingPanel::OnSizeChanged(Object^ sender, Windows::UI::Xaml::SizeChangedEventArgs^ e)
 {
 	_parentScrollView->SizeChanged -= _sizeChangedToken;
-    RequestMeasure();
-    RequestArrange();
+	InvalidateMeasure();
+	InvalidateArrange();
 }
 
 void OrientedVirtualizingPanel::OnItemsChanged(IObservableVector<Object^>^ source, IVectorChangedEventArgs^ e)
 {
 	if (_layout == nullptr)
 	{
-        RequestMeasure();
-        RequestArrange();
+		InvalidateMeasure();
+		InvalidateArrange();
 		return;
 	}
 
@@ -284,8 +277,8 @@ void OrientedVirtualizingPanel::OnItemsChanged(IObservableVector<Object^>^ sourc
 	{
 	case CollectionChange::Reset:
 		_layout->RemoveAll();
-        RequestMeasure();
-        RequestArrange();
+		InvalidateMeasure();
+		InvalidateArrange();
 		break;
 	case CollectionChange::ItemInserted:
 		if (e->Index != Items->Size - 1)
@@ -303,16 +296,16 @@ void OrientedVirtualizingPanel::OnItemsChanged(IObservableVector<Object^>^ sourc
 			}
 		}
 
-        RequestMeasure();
-        RequestArrange();
+		InvalidateMeasure();
+		InvalidateArrange();
 		break;
 	case CollectionChange::ItemRemoved:
 		if ((LONGLONG)e->Index < _layout->UnitCount)
 		{
 			_layout->RemoveItem(e->Index);
 
-            RequestMeasure();
-            RequestArrange();
+			InvalidateMeasure();
+			InvalidateArrange();
 		}
 		break;
 	case CollectionChange::ItemChanged:
@@ -320,8 +313,8 @@ void OrientedVirtualizingPanel::OnItemsChanged(IObservableVector<Object^>^ sourc
 		{
 			_layout->ChangeItem(e->Index, Items->GetAt(e->Index), MeasureItem(Items->GetAt(e->Index), Size(0, 0)));
 
-            RequestMeasure();
-            RequestArrange();
+			InvalidateMeasure();
+			InvalidateArrange();
 		}
 		break;
 	default:
@@ -428,32 +421,8 @@ void OrientedVirtualizingPanel::OnItemContainerSizeChanged(Platform::Object^ ite
 		if (newSize != Layout->GetItemSize(index))
 		{
 			Layout->ChangeItem(index, item, newSize);
-            RequestMeasure();
-            RequestArrange();
+			InvalidateMeasure();
+			InvalidateArrange();
 		}
 	}
-}
-
-void Marduk::Controls::OrientedVirtualizingPanel::OnLoaded(Platform::Object ^sender, Windows::UI::Xaml::RoutedEventArgs ^e)
-{
-    RequestMeasure();
-    RequestArrange();
-}
-
-
-void Marduk::Controls::OrientedVirtualizingPanel::OnUnloaded(Platform::Object ^sender, Windows::UI::Xaml::RoutedEventArgs ^e)
-{
-    auto source = e->OriginalSource;
-}
-
-void Marduk::Controls::OrientedVirtualizingPanel::OnScrollViewLoaded(Platform::Object ^sender, Windows::UI::Xaml::RoutedEventArgs ^e)
-{
-    RequestMeasure();
-    RequestArrange();
-}
-
-
-void Marduk::Controls::OrientedVirtualizingPanel::OnScrollViewUnloaded(Platform::Object ^sender, Windows::UI::Xaml::RoutedEventArgs ^e)
-{
-    auto source = e->OriginalSource;
 }

@@ -292,8 +292,9 @@ void WaterfallFlowLayout::Relayout()
     {
         auto unit = _units->at(i);
 
-        Size size = unit->DesiredSize;
-        //Size((float)((Width - Spacing) / _stacks->size()), unit->DesiredSize.Height);
+		Size size = unit->DesiredSize;
+
+        //Size size = Size((float)((Width - Spacing) / _stacks->size()), unit->DesiredSize.Height);
         //unit->DesiredSize = size;
 
         int minStackIndex = (int)std::distance(_stacks->begin(), std::min_element(_stacks->begin(), _stacks->end()));

@@ -830,8 +830,8 @@ void VirtualizingPanel::OnHeaderContainerStyleChanged(Windows::UI::Xaml::Style^ 
         _headerContainer->Style = newStyle;
     }
 
-    RequestMeasure();
-    RequestArrange();
+    InvalidateMeasure();
+    InvalidateArrange();
 }
 
 void VirtualizingPanel::OnHeaderTemplateChanged(DataTemplate^ newTemplate, DataTemplate^ oldTemplate)
@@ -847,8 +847,8 @@ void VirtualizingPanel::OnHeaderTemplateChanged(DataTemplate^ newTemplate, DataT
         _headerContainer->ContentTemplate = newTemplate;
     }
 
-    RequestMeasure();
-    RequestArrange();
+    InvalidateMeasure();
+    InvalidateArrange();
 }
 
 void VirtualizingPanel::OnHeaderChanged(Platform::Object^ newHeader, Platform::Object^ oldHeader)
@@ -873,8 +873,8 @@ void VirtualizingPanel::OnHeaderChanged(Platform::Object^ newHeader, Platform::O
         _headerContainer->Content = newHeader;
     }
 
-    RequestMeasure();
-    RequestArrange();
+    InvalidateMeasure();
+    InvalidateArrange();
 }
 
 void VirtualizingPanel::OnFooterContainerStyleChanged(Windows::UI::Xaml::Style^ newStyle, Windows::UI::Xaml::Style^ oldStyle)
@@ -890,8 +890,8 @@ void VirtualizingPanel::OnFooterContainerStyleChanged(Windows::UI::Xaml::Style^ 
         _footerContainer->Style = newStyle;
     }
 
-    RequestMeasure();
-    RequestArrange();
+    InvalidateMeasure();
+    InvalidateArrange();
 }
 
 void VirtualizingPanel::OnFooterTemplateChanged(DataTemplate^ newTemplate, DataTemplate^ oldTemplate)
@@ -907,8 +907,8 @@ void VirtualizingPanel::OnFooterTemplateChanged(DataTemplate^ newTemplate, DataT
         _footerContainer->ContentTemplate = newTemplate;
     }
 
-    RequestMeasure();
-    RequestArrange();
+    InvalidateMeasure();
+    InvalidateArrange();
 }
 
 void VirtualizingPanel::OnFooterChanged(Platform::Object^ newFooter, Platform::Object^ oldFooter)
@@ -933,8 +933,8 @@ void VirtualizingPanel::OnFooterChanged(Platform::Object^ newFooter, Platform::O
         _footerContainer->Content = newFooter;
     }
 
-    RequestMeasure();
-    RequestArrange();
+    InvalidateMeasure();
+    InvalidateArrange();
 }
 
 void VirtualizingPanel::OnHeaderMeasureOverride(Size availableSize)

@@ -71,10 +71,6 @@ namespace Marduk
             void OnViewChanging(Platform::Object^ sender, WinCon::ScrollViewerViewChangingEventArgs ^ e);
             void OnSizeChanged(Platform::Object^ sender, Windows::UI::Xaml::SizeChangedEventArgs^ e);
             void OnTick(Object^ sender, Object^e);
-            void OnLoaded(Platform::Object ^sender, Windows::UI::Xaml::RoutedEventArgs ^e);
-            void OnUnloaded(Platform::Object ^sender, Windows::UI::Xaml::RoutedEventArgs ^e);
-            void OnScrollViewLoaded(Platform::Object ^sender, Windows::UI::Xaml::RoutedEventArgs ^e);
-            void OnScrollViewUnloaded(Platform::Object ^sender, Windows::UI::Xaml::RoutedEventArgs ^e);
         };
     }
 }
