@@ -197,42 +197,16 @@ void WaterfallFlowView::ResetStackCount()
         break;
     case Marduk::Controls::AdaptiveMode::MinBased:
     {
-        auto aw = ActualWidth;
-        Size unit = GetItemAvailableSize(Size((float)ActualWidth, INFINITY));
-        if (unit.Width < MinItemWidth)
-        {
-            int stackCount = 1;
-            for (int count = StackCount - 1; count > 1; count--)
-            {
-                float width = (float)((ActualWidth - ((count - 1) * Spacing)) / count);
-                if (width > MinItemWidth)
-                {
-                    stackCount = count;
-                    break;
-                }
-            }
-            StackCount = stackCount;
-        }
+        auto aw = (float)ActualWidth;
+        int maxStackCount = (int)((aw + Spacing) / (MinItemWidth + Spacing));
+        StackCount = max(maxStackCount, 1);
     }
     break;
     case Marduk::Controls::AdaptiveMode::MaxBased:
     {
-        auto aw = ActualWidth;
-        Size unit = GetItemAvailableSize(Size((float)ActualWidth, INFINITY));
-        if (unit.Width > MaxItemWidth)
-        {
-            int stackCount = 1;
-            for (int count = StackCount + 1; true; count++)
-            {
-                float width = (float)((ActualWidth - ((count - 1) * Spacing)) / count);
-                if (width < MaxItemWidth)
-                {
-                    stackCount = count;
-                    break;
-                }
-            }
-            StackCount = stackCount;
-        }
+        auto aw = (float)ActualWidth;
+        int minStackCount = (int)((aw + Spacing) / (MaxItemWidth + Spacing));
+        StackCount = max(minStackCount,1);
     }
     break;
     }

@@ -10,12 +10,12 @@ namespace Marduk
 {
     namespace Controls
     {
-		public enum class AdaptiveMode
-		{
-			Disable,
-			MaxBased,
-			MinBased
-		};
+        public enum class AdaptiveMode
+        {
+            Disable,
+            MaxBased,
+            MinBased
+        };
 
         [Windows::Foundation::Metadata::WebHostHidden()]
         public ref class WaterfallFlowView sealed :
@@ -24,8 +24,8 @@ namespace Marduk
             RegisterDependencyProperty(double, _spacingProperty, SpacingProperty, Spacing);
             RegisterDependencyProperty(int, _stackCountProperty, StackCountProperty, StackCount);
             RegisterDependencyProperty(Marduk::Controls::AdaptiveMode, _adaptiveModeProperty, AdaptiveModeProperty, AdaptiveMode);
-            RegisterDependencyProperty(int , _maxItemWidthProperty, MaxItemWidthProperty, MaxItemWidth);
-            RegisterDependencyProperty(int , _minItemWidthProperty, MinItemWidthProperty, MinItemWidth);
+            RegisterDependencyProperty(int, _maxItemWidthProperty, MaxItemWidthProperty, MaxItemWidth);
+            RegisterDependencyProperty(int, _minItemWidthProperty, MinItemWidthProperty, MinItemWidth);
 
         public:
             WaterfallFlowView();
@@ -38,7 +38,7 @@ namespace Marduk
             virtual ILayout^ GetLayout(Size availableSize) override;
 
         private:
-            RegisterReadOnlyPropertyWithExpression(WaterfallFlowLayout^, if (_waterfallFlowLayout == nullptr) { _waterfallFlowLayout = dynamic_cast<WaterfallFlowLayout^>(Layout); } return _waterfallFlowLayout; , WaterfallFlow)
+            RegisterReadOnlyPropertyWithExpression(WaterfallFlowLayout^, if (_waterfallFlowLayout == nullptr) { _waterfallFlowLayout = dynamic_cast<WaterfallFlowLayout^>(Layout); } return _waterfallFlowLayout;, WaterfallFlow)
                 WaterfallFlowLayout^ _waterfallFlowLayout;
             static void OnSpacingChangedStatic(DependencyObject^ sender, Windows::UI::Xaml::DependencyPropertyChangedEventArgs^ e);
             static void OnStackCountChangedStatic(DependencyObject^ sender, Windows::UI::Xaml::DependencyPropertyChangedEventArgs^ e);
