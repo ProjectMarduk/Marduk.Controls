@@ -47,7 +47,7 @@ void WaterfallFlowView::RegisterDependencyProperties()
             nameof(AdaptiveMode),
             typeof(Marduk::Controls::AdaptiveMode),
             typeof(WaterfallFlowView),
-            ref new PropertyMetadata(false,
+            ref new PropertyMetadata(Marduk::Controls::AdaptiveMode::Disable,
                 ref new PropertyChangedCallback(
                     &WaterfallFlowView::OnAdaptiveModeChangedStatic)));
     }
