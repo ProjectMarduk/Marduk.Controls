@@ -3,6 +3,31 @@
 
 using namespace Marduk::Controls;
 
+void OrientedVirtualizingPanel::ScrollIntoView(unsigned int index)
+{
+    this->ScrollIntoView(index, false);
+}
+
+void OrientedVirtualizingPanel::ScrollIntoView(Platform::Object ^ item)
+{
+    this->ScrollIntoView(item, false);
+}
+
+void OrientedVirtualizingPanel::ScrollIntoView(unsigned int index, bool disableAnimation)
+{
+    auto rect = this->Layout->GetItemLayoutRect(index);
+    auto vtOffset = this->ParentScrollView->VerticalOffset;
+    auto vbOffset = this->ParentScrollView->VerticalOffset + this->ParentScrollView->ViewportHeight;
+    auto htOffset = this->ParentScrollView->HorizontalOffset;
+    auto hbOffset = this->ParentScrollView->HorizontalOffset + this->ParentScrollView->ViewportWidth;
+
+}
+
+void OrientedVirtualizingPanel::ScrollIntoView(Platform::Object ^ item, bool disableAnimation)
+{
+
+}
+
 OrientedVirtualizingPanel::OrientedVirtualizingPanel()
 {
     _timer = ref new Windows::UI::Xaml::DispatcherTimer();
