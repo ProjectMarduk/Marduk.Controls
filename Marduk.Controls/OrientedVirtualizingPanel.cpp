@@ -16,16 +16,66 @@ void OrientedVirtualizingPanel::ScrollIntoView(Platform::Object ^ item)
 void OrientedVirtualizingPanel::ScrollIntoView(unsigned int index, bool disableAnimation)
 {
     auto rect = this->Layout->GetItemLayoutRect(index);
-    auto vtOffset = this->ParentScrollView->VerticalOffset;
-    auto vbOffset = this->ParentScrollView->VerticalOffset + this->ParentScrollView->ViewportHeight;
-    auto htOffset = this->ParentScrollView->HorizontalOffset;
-    auto hbOffset = this->ParentScrollView->HorizontalOffset + this->ParentScrollView->ViewportWidth;
+    auto viewSize = Size{ (float)this->ParentScrollView->ViewportWidth, (float)this->ParentScrollView->ViewportHeight };
+    auto viewOffset = Point{ (float)this->ParentScrollView->HorizontalOffset, (float)this->ParentScrollView->VerticalOffset };
 
+    auto vtOffset = viewOffset.Y;
+    auto vbOffset = viewOffset.Y + viewSize.Height;
+    auto htOffset = viewOffset.X;
+    auto hbOffset = viewOffset.X + viewSize.Width;
+
+    double vTarget = NAN;
+    double hTarget = NAN;
+
+    if (rect.Top < vtOffset)
+    {
+        vTarget = rect.Top;
+    }
+    else if (rect.Bottom > vtOffset)
+    {
+        vTarget = rect.Bottom - viewSize.Height;
+    }
+
+    if (rect.Left < htOffset)
+    {
+        hTarget = rect.Left;
+    }
+    else if (rect.Right > hbOffset)
+    {
+        vTarget = rect.Right - viewSize.Width;
+    }
+
+    if (!isnan(vTarget))
+    {
+        if (vTarget < 0)
+        {
+            vTarget = 0;
+        }
+    }
+
+    if (!isnan(hTarget))
+    {
+        if (hTarget < 0)
+        {
+            hTarget = 0;
+        }
+    }
+
+    IBox<double>^ h = isnan(hTarget) ? nullptr : ref new Box<double>(hTarget);
+    IBox<double>^ v = isnan(vTarget) ? nullptr : ref new Box<double>(vTarget);
+
+    this->ParentScrollView->ChangeView(h, v, nullptr, disableAnimation);
 }
 
 void OrientedVirtualizingPanel::ScrollIntoView(Platform::Object ^ item, bool disableAnimation)
 {
+    unsigned int index;
+    if (!Items->IndexOf(item, &index))
+    {
+        return;
+    }
 
+    this->ScrollIntoView(index, false);
 }
 
 OrientedVirtualizingPanel::OrientedVirtualizingPanel()

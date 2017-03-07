@@ -17,6 +17,7 @@ namespace Marduk
             RegisterProperty(bool, _delayMeasure, DelayMeasure);
 
             void ScrollIntoView(Platform::Object^ item);
+            [Windows::Foundation::Metadata::DefaultOverload()]
             void ScrollIntoView(unsigned int index);
             void ScrollIntoView(Platform::Object^ item, bool disableAnimation);
             void ScrollIntoView(unsigned int index, bool disableAnimation);
